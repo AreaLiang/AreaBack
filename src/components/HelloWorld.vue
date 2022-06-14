@@ -1,58 +1,88 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+	<div class="hello">
+		
+		<div id="toolbar-container"></div>
+		<div id="editor-container"></div>
+	</div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+	import '@wangeditor/editor/dist/css/style.css'
+	import {uploadApi} from '@/request/api'
+	import {
+		createEditor,
+		createToolbar,
+		IEditorConfig,
+		IDomEditor
+	} from '@wangeditor/editor'
+	
+	export default {
+		name: 'HelloWorld',
+		props: {
+			msg: String
+		},
+		mounted() {
+		
+			// 编辑器配置
+			const editorConfig = {
+				MENU_CONF: {},
+			}
+
+			editorConfig.onChange = (editor) => {
+				// 当编辑器选区、内容变化时，即触发
+				console.log('content', editor.children)
+				console.log('html', editor.getHtml())
+			}
+
+			// 修改 uploadImage 菜单配置
+			editorConfig.MENU_CONF['uploadImage'] = {
+				
+				fieldName: 'custom-field-name',
+				async customUpload(file, insertFn) {
+					// file 即选中的文件
+					// 自己实现上传，并得到图片 url alt href
+					
+					const formData = new FormData();
+					
+				
+					formData.append('file', file);
+						console.log(formData)
+					uploadApi(formData).then((res)=>{
+						console.log(res);
+						let host='http://localhost:5000';
+						let imgUrl=host+'\\' +res.filename;
+						// 最后插入图片
+						insertFn(imgUrl, 'imgUrl', 'imgUrl')
+					})
+
+					
+				}
+			}
+
+			// 工具栏配置
+			const toolbarConfig = {}
+
+			// 创建编辑器
+			const editor = createEditor({
+				selector: '#editor-container',
+				config: editorConfig,
+				mode: 'default' // 或 'simple' 参考下文
+			})
+			// 创建工具栏
+			const toolbar = createToolbar({
+				editor,
+				selector: '#toolbar-container',
+				config: toolbarConfig,
+				mode: 'default' // 或 'simple' 参考下文
+			})
+
+		}
+	}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+	.hello {
+		background-color: white;
+	}
 </style>
