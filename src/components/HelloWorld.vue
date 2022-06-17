@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div class="hello">
 		
 		<div id="toolbar-container"></div>
@@ -80,9 +80,9 @@
 	}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	.hello {
 		background-color: white;
 	}
 </style>
+ -->

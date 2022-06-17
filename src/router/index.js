@@ -30,10 +30,20 @@ export const constantRoutes = [{
 		children: [{
 			name: 'UserData',
 			path: 'userData',
-			meta: {
-				title: 'Area后台登录'
-			},
 			component: () => import('@/views/Home/UserData/UserData')
+		}]
+	},
+	{
+		name: 'Home',
+		path: '/Home',
+		meta: {
+			title: 'Area后台功能界面'
+		},
+		component: () => import('@/views/Home/Home'),
+		children: [{
+			name: 'PublishArticle',
+			path: 'publishArticle',
+			component: () => import('@/views/Home/PublishArticle/PublishArticle')
 		}]
 	}
 ]
@@ -113,7 +123,7 @@ const router = createRouter();
 //路由守卫后置钩子
 router.afterEach((to, from) => {
 	//修改标题名称
-	document.title = to.meta.title || "业务大厅"; //如果没有标题名，默认显示“ 业务大厅 ”
+	document.title = to.meta.title || "Area管理后台"; //如果没有标题名，默认显示“ Area管理后台 ”
 })
 
 //重置路由

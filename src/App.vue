@@ -20,6 +20,7 @@
 		padding: 0;
 		margin: 0;
 		height: 100%;
+		overflow: hidden;
 	}
 
 	#app {
@@ -32,5 +33,8 @@
 		vertical-align: -0.15em;
 		fill: currentColor;
 		overflow: hidden;
+	}
+	img{
+		width: 100%;
 	}
 </style>

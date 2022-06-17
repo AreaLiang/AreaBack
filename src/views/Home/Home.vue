@@ -39,6 +39,7 @@
 	.home {
 		min-width: 1500px;
 		height: 100%;
+		width: 100%;
 		.h-style {
 			height: @h-height;
 		}

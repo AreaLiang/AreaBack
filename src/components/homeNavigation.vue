@@ -11,7 +11,7 @@
 					<i class="el-icon-location"></i>
 					<span>文章管理</span>
 				</template>
-				<el-menu-item index="2-1">发表文章</el-menu-item>
+				<el-menu-item index="/Home/publishArticle">发表文章</el-menu-item>
 				<el-menu-item index="2-2">文章管理</el-menu-item>
 				<el-menu-item index="2-3">评论管理</el-menu-item>
 			</el-submenu>
