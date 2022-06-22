@@ -15,6 +15,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
+//引入vuex 状态管理模式
+import store from '@/store'
+
 // 引入 echarts 核心模块，核心模块提供了 echarts 使用必须要的接口。
 import * as echarts from 'echarts/core';
 Vue.prototype.echarts=echarts
@@ -55,5 +58,6 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
-  router:router
+  router:router,
+  store
 }).$mount('#app')
