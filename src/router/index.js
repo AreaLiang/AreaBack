@@ -36,14 +36,31 @@ export const constantRoutes = [{
 	{
 		name: 'Home',
 		path: '/Home',
-		meta: {
-			title: 'Area后台功能界面'
-		},
 		component: () => import('@/views/Home/Home'),
 		children: [{
 			name: 'PublishArticle',
 			path: 'publishArticle',
-			component: () => import('@/views/Home/PublishArticle/PublishArticle')
+			component: () => import('@/views/Home/Article/PublishArticle')
+		}]
+	},
+	{
+		name: 'Home',
+		path: '/Home',
+		component: () => import('@/views/Home/Home'),
+		children: [{
+			name: 'ArticleManagement',
+			path: 'articleManagement',
+			component: () => import('@/views/Home/Article/ArticleManagement')
+		}]
+	},
+	{
+		name: 'Home',
+		path: '/Home',
+		component: () => import('@/views/Home/Home'),
+		children: [{
+			name: 'CommentManagement',
+			path: 'commentManagement',
+			component: () => import('@/views/Home/Article/CommentManagement')
 		}]
 	}
 ]
