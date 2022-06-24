@@ -37,7 +37,7 @@
 <style scoped lang="less">
 	@import '@/styles';
 	.home {
-		min-width: 1500px;
+		min-width: 1380px;
 		height: 100%;
 		width: 100%;
 		.h-style {

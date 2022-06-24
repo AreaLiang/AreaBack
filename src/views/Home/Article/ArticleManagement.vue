@@ -3,6 +3,7 @@
 		<div class="wrap">
 			<div class="ob-list">
 				<el-form :inline="true" :model="articelQueryForm" class="demo-form-inline">
+
 					<el-form-item label="文章标题">
 						<el-input v-model="articelQueryForm.content" placeholder="请输入搜索内容"></el-input>
 					</el-form-item>
@@ -26,19 +27,25 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="日期范围">
-						<datePicker></datePicker>
+						<datePicker ref="datePicker"></datePicker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="onSubmit">查询</el-button>
+						<el-button type="primary" @click="searchSubmit">查询</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
-			<el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
-				:header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
+			<el-table :data="tableData" style="width: 100%;height: 750px;overflow:auto"
+				@selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}"
+				:cell-style="{'text-align':'center'}" class="article_mag">
 				<el-table-column type="selection" width="55"></el-table-column>
-				<el-table-column label="文章标题" width="300">
+				<el-table-column label="id" width="50">
 					<template slot-scope="scope">
-						<span>{{ scope.row.title }}</span>
+						<span>{{ scope.row.id }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="文章标题" width="300" prop="title">
+					<template slot-scope="scope">
+						<span class="title">{{ scope.row.title }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="置顶" width="50">
@@ -50,30 +57,29 @@
 				</el-table-column>
 				<el-table-column label="文章分类">
 					<template slot-scope="scope">
-						<span>{{ scope.row.classification }}</span>
+						<span>{{ scope.row.articleType }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="状态">
 					<template slot-scope="scope">
-						<span>{{ scope.row.status }}</span>
+						<div slot="reference" class="name-wrapper">
+							<el-tag size="medium" :type='scope.row.status|tagStatusType'>{{ scope.row.status }}</el-tag>
+						</div>
 					</template>
 				</el-table-column>
-				<el-table-column label="浏览量">
+				<el-table-column label="浏览量" sortable prop="pageviews">
 					<template slot-scope="scope">
 						<span>{{ scope.row.pageviews }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="发布日期" sortable>
+				<el-table-column label="发布日期" sortable prop="publishDate" width="180">
 					<template slot-scope="scope">
-						<i class="el-icon-time"></i>
 						<span>{{ scope.row.publishDate }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="姓名">
 					<template slot-scope="scope">
-						<div slot="reference" class="name-wrapper">
-							<el-tag size="medium">{{ scope.row.name }}</el-tag>
-						</div>
+						<span>{{ scope.row.name }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="230">
@@ -86,7 +92,6 @@
 					</template>
 				</el-table-column>
 			</el-table>
-
 			<div class="pagination">
 				<pagination :dataTotal="55" :pageSize="15" />
 			</div>
@@ -97,81 +102,24 @@
 <script>
 	import pagination from '@/components/pagination'
 	import datePicker from '@/components/datePicker'
+	import {dateFormat} from '@/utils'
+	import {
+		articleManagementApi
+	} from '@/request/api'
 	export default {
 		name: 'ArticleManagement', //文章管理
 		data() {
 			return {
-				tableData: [{
-						publishDate: '2016-05-02',
-						name: '王小虎',
-						title: '上海市普陀区金沙江路 1518 弄',
-						top: false,
-						classification: '政治',
-						status: '已发布',
-						pageviews:520
-					},
-					{
-						publishDate: '2016-05-01',
-						name: '小虎',
-						title: '上海市普陀区金沙江路 1518 弄',
-						top: false,
-						classification: '政治',
-						status: '审核中',
-						pageviews:0
-					},
-					{
-						publishDate: '2016-04-02',
-						name: '赖少',
-						title: '上海市普陀区金沙江路 1518 弄',
-						top: false,
-						classification: '体育',
-						status: '已发布',
-						pageviews:9860
-					},
-					{
-						publishDate: '2016-06-02',
-						name: '王小虎',
-						title: '上海市普陀区金沙江路 1518 弄',
-						top: false,
-						classification: '财经',
-						status: '已下架',
-						pageviews:660
-					},
-					{
-						publishDate: '2016-06-02',
-						name: '江弄小',
-						title: '上海市普陀区金沙江路 1518 弄',
-						top: false,
-						classification: '体育',
-						status: '审核中',
-						pageviews:0
-					},
-					{
-						publishDate: '2016-06-02',
-						name: '普小市',
-						title: '上海市普陀区金沙江路 1518 弄',
-						top: false,
-						classification: '政治',
-						status: '已发布',
-						pageviews:166
-					},
-					{
-						publishDate: '2016-06-02',
-						name: '美海',
-						title: '上海市普陀区金沙江路 1518 弄',
-						top: false,
-						classification: '美食',
-						status: '已发布',
-						pageviews:19
-					}
-				],
+				tableData: [],
 				articelQueryForm: {
 					content: "",
 					statusType: "全部",
 					articleType: '全部',
 					dateRange: ''
 				},
-				multipleSelection: []
+				multipleSelection: [],
+				page: 1,
+				number: 9
 			}
 		},
 		methods: {
@@ -185,17 +133,50 @@
 			handleDown(index, row) {
 				console.log(index, row);
 			},
-			onSubmit() {
-
+			searchSubmit() {
+				this.articelQueryForm.dateRange=[...this.$refs['datePicker'].dateRange];
+				console.log({...this.articelQueryForm})
 			},
 			handleSelectionChange(val) {
 				this.multipleSelection = val;
 				console.log(val)
+			},
+			getArtcleMgeData() { //获取页面的文章管理数据
+				articleManagementApi({
+					page: this.page,
+					number: this.number,
+				}).then((res) => {
+					console.log(res);
+					this.tableData = Object.values(res.data);
+				});
 			}
+		},
+		filters: {
+			tagStatusType: function(value) {//文章状态转换对应标签的颜色
+				let tag={
+					"审核中":'warning',
+					"已发布":'success',
+					"已下架":'info'
+				};
+				let map=new Map(Object.entries(tag));
+				if (map.has(value)){
+					return map.get(value)
+				}else ''
+			}
+		},
+		mounted() {
+			this.getArtcleMgeData(); //初始化数据
+			this.$bus.$on('pageNumber', (val) => {
+				this.page = val;
+				this.getArtcleMgeData(); //页面改变重新请求数据
+			});
 		},
 		components: {
 			pagination,
 			datePicker
+		},
+		beforeDestroy() {
+			this.$bus.$off('pageNumber');//解绑页码点击事件
 		}
 	}
 </script>
@@ -211,6 +192,16 @@
 		.pagination {
 			text-align: right;
 			margin-top: 10px;
+		}
+
+		.article_mag {
+			.title {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
 		}
 	}
 </style>

@@ -1,8 +1,8 @@
 <template>
 	<div class="date-picker">
-		<el-date-picker v-model="dateRange" type="daterange" align="right" unlink-panels
+		<el-date-picker value-format="yyyy-MM-dd" v-model="dateRange" type="daterange" align="right" unlink-panels
 			range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-			:picker-options="pickerOptions">
+			:picker-options="pickerOptions" >
 		</el-date-picker>
 	</div>
 </template>
@@ -41,12 +41,6 @@
 				},
 				dateRange: ''
 			}
-		},
-		methods:{
-		
-		},
-		components:{
-			
 		}
 	}
 </script>
