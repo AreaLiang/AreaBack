@@ -26,7 +26,7 @@
 				</el-form>
 			</div>
 			<el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
-				:header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
+				:header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" class="article_mag">
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column label="文章标题" width="300">
 					<template slot-scope="scope">
@@ -151,16 +151,8 @@
 </script>
 
 <style scoped lang="less">
+	@import "@/styles/index";
 	.comment-management {
-		overflow: hidden;
-
-		.wrap {
-			margin: 10px
-		}
-
-		.pagination {
-			text-align: right;
-			margin-top: 10px;
-		}
+		.artcleMegStyle();
 	}
 </style>

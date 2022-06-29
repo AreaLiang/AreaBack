@@ -14,7 +14,7 @@
 				<el-menu-item index="/Home/publishArticle">发表文章</el-menu-item>
 				<el-menu-item index="/Home/articleManagement">文章管理</el-menu-item>
 				<el-menu-item index="/Home/CommentManagement">评论管理</el-menu-item>
-				<el-menu-item index="/Home/CommentManagement">文章审核</el-menu-item>
+				<el-menu-item index="/Home/articleVerify">文章审核</el-menu-item>
 			</el-submenu>
 			<el-submenu index="3">
 				<template slot="title">

@@ -2,13 +2,13 @@
 	<div class="article-management">
 		<div class="wrap">
 			<div class="ob-list">
-				<el-form :inline="true" :model="articelQueryForm" class="demo-form-inline">
+				<el-form :inline="true" :model="articleQueryForm" class="demo-form-inline">
 
 					<el-form-item label="文章标题">
-						<el-input v-model="articelQueryForm.content" placeholder="请输入搜索内容"></el-input>
+						<el-input v-model.trim="articleQueryForm.content" placeholder="请输入搜索内容"></el-input>
 					</el-form-item>
 					<el-form-item label="状态">
-						<el-select v-model="articelQueryForm.statusType">
+						<el-select v-model="articleQueryForm.statusType">
 							<el-option label="全部" value="all"></el-option>
 							<el-option label="已发布" value="yfb"></el-option>
 							<el-option label="审核中" value="shz"></el-option>
@@ -16,7 +16,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="文章类别">
-						<el-select v-model="articelQueryForm.articleType">
+						<el-select v-model="articleQueryForm.articleType">
 							<el-option label="全部" value="all"></el-option>
 							<el-option label="政治" value="zhengzhi"></el-option>
 							<el-option label="体育" value="tiyu"></el-option>
@@ -36,7 +36,7 @@
 			</div>
 			<el-table :data="tableData" style="width: 100%;height: 750px;overflow:auto"
 				@selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}"
-				:cell-style="{'text-align':'center'}" class="article_mag">
+				:cell-style="{'text-align':'center'}" class="article_mag" v-loading="loading">
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column label="id" width="50">
 					<template slot-scope="scope">
@@ -82,18 +82,20 @@
 						<span>{{ scope.row.name }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="230">
+				<el-table-column label="操作" width="250">
 					<template slot-scope="scope">
 						<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-						<el-button size="mini" type="primary" @click="handleDown(scope.$index, scope.row)">下架
-						</el-button>
+						<el-button size="mini" type="primary" @click="handleDown(scope.$index, scope.row)"
+							v-text="$options.filters.filterDown(scope.row.status)"
+							v-if="$options.filters.filterDown(scope.row.status)"></el-button>
+
 						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
 						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<div class="pagination">
-				<pagination :dataTotal="55" :pageSize="15" />
+				<pagination :dataTotal="dataTotal" :pageSize="number" />
 			</div>
 		</div>
 	</div>
@@ -102,40 +104,105 @@
 <script>
 	import pagination from '@/components/pagination'
 	import datePicker from '@/components/datePicker'
-	import {dateFormat} from '@/utils'
 	import {
-		articleManagementApi
+		dateFormat
+	} from '@/utils'
+	import {
+		articleManagementApi,
+		articleMgeSearchApi,
+		artMegDownApi,
+		artMegDelApi
 	} from '@/request/api'
 	export default {
 		name: 'ArticleManagement', //文章管理
 		data() {
 			return {
 				tableData: [],
-				articelQueryForm: {
+				articleQueryForm: {
 					content: "",
-					statusType: "全部",
-					articleType: '全部',
+					statusType: "all",
+					articleType: 'all',
 					dateRange: ''
 				},
 				multipleSelection: [],
 				page: 1,
-				number: 9
+				number: 9,
+				dataTotal: 0,
+				loading: true
 			}
 		},
 		methods: {
 			handleEdit(index, row) {
-				console.log(index, row);
+				this.$router.push({
+					name: 'PublishArticle',
+					params: {
+						id: row.id
+					}
+				})
 			},
 			handleDelete(index, row) {
-				console.log(index, row);
-
+				this.$confirm(`此操作将删除该文章, 是否继续?`, '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					artMegDelApi({
+						id: row.id
+					}).then((res) => {
+						if (res.code == '200') {
+							this.getArtcleMgeData();
+							this.$message({
+								type: 'success',
+								message: `删除成功!`
+							});
+						} else {
+							this.$message({
+								type: 'warning',
+								message: `删除失败!`
+							});
+						}
+					});
+				}).catch(e => e);
 			},
 			handleDown(index, row) {
-				console.log(index, row);
+				//opcode操作码，-1 是下架，1是重新发布
+				let opcode = row.status == '已发布' ? -1 : 1;
+				let mes = row.status == '已发布' ? '下架' : '重新发布'
+
+				this.$confirm(`此操作将${mes}该文章, 是否继续?`, '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					artMegDownApi({
+						id: row.id,
+						opcode: opcode
+					}).then((res) => {
+						if (res.code == '200') {
+							this.getArtcleMgeData();
+							this.$message({
+								type: 'success',
+								message: `${mes}成功!`
+							});
+						} else {
+							this.$message({
+								type: 'warning',
+								message: `${mes}失败!`
+							});
+						}
+					});
+				}).catch(e => e);
 			},
 			searchSubmit() {
-				this.articelQueryForm.dateRange=[...this.$refs['datePicker'].dateRange];
-				console.log({...this.articelQueryForm})
+				this.articleQueryForm.dateRange = [...this.$refs['datePicker'].dateRange];
+				articleMgeSearchApi({
+					page: this.page,
+					number: this.number,
+					searchList: JSON.stringify(this.articleQueryForm)
+				}).then((res) => {
+					this.tableData = Object.values(res.data);
+					this.dataTotal = parseInt(res.list) * this.number;
+				});
 			},
 			handleSelectionChange(val) {
 				this.multipleSelection = val;
@@ -146,22 +213,36 @@
 					page: this.page,
 					number: this.number,
 				}).then((res) => {
-					console.log(res);
+					console.log(res)
 					this.tableData = Object.values(res.data);
+					this.dataTotal = parseInt(res.list) * this.number;
+					this.loading = false;
+				}).catch((e) => {
+					this.loading = false
 				});
 			}
 		},
 		filters: {
-			tagStatusType: function(value) {//文章状态转换对应标签的颜色
-				let tag={
-					"审核中":'warning',
-					"已发布":'success',
-					"已下架":'info'
+			tagStatusType: function(value) { //文章状态转换对应标签的颜色
+				let tag = {
+					"审核中": 'warning',
+					"已发布": 'success',
+					"已下架": 'info'
 				};
-				let map=new Map(Object.entries(tag));
-				if (map.has(value)){
-					return map.get(value)
-				}else ''
+				let map = new Map(Object.entries(tag));
+
+				return map.has(value) ? map.get(value) : '';
+			},
+			filterDown: function(value) {
+
+				let text = {
+					"审核中": false,
+					"已发布": '下架',
+					"已下架": '重新发布'
+				};
+
+				let map = new Map(Object.entries(text));
+				return map.has(value) ? map.get(value) : '';
 			}
 		},
 		mounted() {
@@ -176,32 +257,15 @@
 			datePicker
 		},
 		beforeDestroy() {
-			this.$bus.$off('pageNumber');//解绑页码点击事件
+			this.$bus.$off('pageNumber'); //解绑页码点击事件
 		}
 	}
 </script>
 
 <style scoped lang="less">
+	@import "@/styles/index";
+	
 	.article-management {
-		overflow: hidden;
-
-		.wrap {
-			margin: 10px
-		}
-
-		.pagination {
-			text-align: right;
-			margin-top: 10px;
-		}
-
-		.article_mag {
-			.title {
-				overflow: hidden;
-				text-overflow: ellipsis;
-				display: -webkit-box;
-				-webkit-line-clamp: 2;
-				-webkit-box-orient: vertical;
-			}
-		}
+		.artcleMegStyle();
 	}
 </style>

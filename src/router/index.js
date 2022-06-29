@@ -12,7 +12,7 @@ export const constantRoutes = [{
 		path: '/',
 		redirect: '/Login'
 	},
-	{
+	{//登录界面
 		name: 'Login',
 		path: '/Login',
 		meta: {
@@ -20,7 +20,7 @@ export const constantRoutes = [{
 		},
 		component: () => import('@/views/Login')
 	},
-	{
+	{//主页用户数据
 		name: 'Home',
 		path: '/Home',
 		meta: {
@@ -33,7 +33,7 @@ export const constantRoutes = [{
 			component: () => import('@/views/Home/UserData/UserData')
 		}]
 	},
-	{
+	{//发布文章
 		name: 'Home',
 		path: '/Home',
 		component: () => import('@/views/Home/Home'),
@@ -43,7 +43,7 @@ export const constantRoutes = [{
 			component: () => import('@/views/Home/Article/PublishArticle')
 		}]
 	},
-	{
+	{//文章管理
 		name: 'Home',
 		path: '/Home',
 		component: () => import('@/views/Home/Home'),
@@ -53,7 +53,7 @@ export const constantRoutes = [{
 			component: () => import('@/views/Home/Article/ArticleManagement')
 		}]
 	},
-	{
+	{//评论管理
 		name: 'Home',
 		path: '/Home',
 		component: () => import('@/views/Home/Home'),
@@ -61,6 +61,16 @@ export const constantRoutes = [{
 			name: 'CommentManagement',
 			path: 'commentManagement',
 			component: () => import('@/views/Home/Article/CommentManagement')
+		}]
+	},
+	{//文章审核
+		name: 'Home',
+		path: '/Home',
+		component: () => import('@/views/Home/Home'),
+		children: [{
+			name: 'ArticleVerify',
+			path: 'articleVerify',
+			component: () => import('@/views/Home/Article/articleVerify')
 		}]
 	}
 ]

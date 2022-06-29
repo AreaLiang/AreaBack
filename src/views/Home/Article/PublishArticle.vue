@@ -3,7 +3,7 @@
 		<div class="warp">
 			<div class="ob-btn-list pu-style">
 				<el-button type="primary" @click="publish('articleForm')">发表文章</el-button>
-				<el-button type="primary" @click="aa()">测试文章</el-button>
+				<el-button type="primary" @click="testForm">测试文章</el-button>
 			</div>
 			<div class="components-container pu-style">
 				<div>
@@ -33,7 +33,8 @@
 <script>
 	import Tinymce from '@/components/Tinymce'
 	import {
-		publishArticleApi
+		publishArticleApi,
+		queryArticleApi
 	} from '@/request/api'
 
 	import {throttle} from '@/utils'
@@ -115,7 +116,26 @@
 			Tinymce
 		},
 		mounted() {
-
+			let articleId=this.$route.params.id;
+			if(articleId){
+				queryArticleApi({
+					id:articleId
+				}).then((res)=>{
+					console.log("66",res)
+					if(res.code=='200'){
+						this.article.title=res.data.title;
+						this.content=`"<p>近日，辽宁省沈阳市有李姓家长反映，在高考期间发现，孩子的高考考生号竟然是学校给的假考生号，无法参加高考。更让家长愤怒的是，他们家孩子根本没有学籍且无法办理毕业证，更没有参加高考的资格，一切都是骗局。只因三年前民办中学沈阳市东兴高级中学违规录取小李，而小李一家对此一无所知。</p>
+							<p>6月20日，上游新闻（报料邮箱：cnshangyou@163.com）记者采访了解到，校方负责人表示，当年涉事考生小李的中考分数未达到录取线，该校违规操作录取了。目前该校已受到主管部门处罚，该校2022年的招生计划已经全部取消。</p>
+							<p><img src="https://p9.toutiaoimg.com/origin/tos-cn-i-tjoges91tu/T9Ih69NGvumb10?from=pc" alt="" /></p>
+							<p>1月初小李曾参加辽宁高中学业水平考试。 图片来源：受访者供图</p>
+							<p><strong>校方竟然提供假考生号</strong></p>
+							<p>今年18岁的高三毕业生小李，就读于沈阳市东兴高级中学高三二班，和其他考生一样，对于未来的大学生活有着许多的憧憬。</p>
+							<p>进入高三后，有关高考的报名、图像采集、指纹录入、文件签字等，相关流程全部按部就班完成，包括小李在内的考生都顺利拿到准考证。</p>
+							<p>2022年3月中旬，小李报名参加辽宁省两所高校的提前招考，并上传了自己的相关信息，考试时间为5月19日。就在小李全力以赴备考时，5月11日，上述两所大学招办分别告诉小李，其资格审查无法通过，而未能通过审查的原因是小李的高考考生号有误。</p>
+							<p><img src="https://p9.toutiaoimg.com/origin/tos-cn-i-tjoges91tu/T9Ih6AYAJYbpuk?from=pc" alt="" /></p>"`
+					}
+				});
+			}
 		}
 	}
 </script>
