@@ -72,7 +72,29 @@ export const constantRoutes = [{
 			path: 'articleVerify',
 			component: () => import('@/views/Home/Article/articleVerify')
 		}]
+	},
+	{//用户管理
+		name: 'Home',
+		path: '/Home',
+		component: () => import('@/views/Home/Home'),
+		children: [{
+			name: 'UserManagement',
+			path: 'userManagement',
+			component: () => import('@/views/Home/UserManagement/UserManagement')
+		}]
+	},
+	{//用户权限分配
+		name: 'Home',
+		path: '/Home',
+		component: () => import('@/views/Home/Home'),
+		children: [{
+			name: 'UserAssignments',
+			path: 'userAssignments',
+			component: () => import('@/views/Home/UserManagement/UserAssignments')
+		}]
 	}
+	
+	
 ]
 
 

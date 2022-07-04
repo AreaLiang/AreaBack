@@ -31,6 +31,7 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="searchSubmit">查询</el-button>
+						<el-button type="danger" @click="batchDeletion">批量删除</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -38,7 +39,7 @@
 				@selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}"
 				:cell-style="{'text-align':'center'}" class="article_mag" v-loading="loading">
 				<el-table-column type="selection" width="55"></el-table-column>
-				<el-table-column label="id" width="50">
+				<el-table-column label="ID" width="50">
 					<template slot-scope="scope">
 						<span>{{ scope.row.id }}</span>
 					</template>
@@ -140,29 +141,26 @@
 					}
 				})
 			},
-			handleDelete(index, row) {
-				this.$confirm(`此操作将删除该文章, 是否继续?`, '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					artMegDelApi({
-						id: row.id
-					}).then((res) => {
-						if (res.code == '200') {
-							this.getArtcleMgeData();
-							this.$message({
-								type: 'success',
-								message: `删除成功!`
-							});
-						} else {
-							this.$message({
-								type: 'warning',
-								message: `删除失败!`
-							});
-						}
+			handleDelete(index, row) {//单项文章删除
+				
+			},
+			batchDeletion() {//批量删除
+			
+				if (this.multipleSelection.length > 0) {
+					let set=new Set();
+					let multipleSelection=JSON.parse(JSON.stringify(this.multipleSelection));
+					for(let item of multipleSelection){
+						set.add(item.id)
+					}
+					set=JSON.stringify(Array.from(set));
+				
+					this.deleteFun({delList: set})
+				} else {
+					this.$message({
+						message: '没有选中任何选项',
+						type: 'warning'
 					});
-				}).catch(e => e);
+				}
 			},
 			handleDown(index, row) {
 				//opcode操作码，-1 是下架，1是重新发布
@@ -193,7 +191,7 @@
 					});
 				}).catch(e => e);
 			},
-			searchSubmit() {
+			searchSubmit() {//搜索提交 功能
 				this.articleQueryForm.dateRange = [...this.$refs['datePicker'].dateRange];
 				articleMgeSearchApi({
 					page: this.page,
@@ -204,22 +202,42 @@
 					this.dataTotal = parseInt(res.list) * this.number;
 				});
 			},
-			handleSelectionChange(val) {
+			handleSelectionChange(val) { //点击多选按钮
 				this.multipleSelection = val;
-				console.log(val)
 			},
 			getArtcleMgeData() { //获取页面的文章管理数据
 				articleManagementApi({
 					page: this.page,
 					number: this.number,
 				}).then((res) => {
-					console.log(res)
 					this.tableData = Object.values(res.data);
 					this.dataTotal = parseInt(res.list) * this.number;
 					this.loading = false;
 				}).catch((e) => {
 					this.loading = false
 				});
+			},
+			deleteFun(data){//删除功能
+				this.$confirm(`此操作将删除该文章, 是否继续?`, '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					artMegDelApi(data).then((res) => {
+						if (res.code == '200') {
+							this.searchSubmit();
+							this.$message({
+								type: 'success',
+								message: `删除成功!`
+							});
+						} else {
+							this.$message({
+								type: 'warning',
+								message: `删除失败!`
+							});
+						}
+					});
+				}).catch(e => e);
 			}
 		},
 		filters: {
@@ -227,7 +245,8 @@
 				let tag = {
 					"审核中": 'warning',
 					"已发布": 'success',
-					"已下架": 'info'
+					"已下架": 'info',
+					"审核失败": 'danger'
 				};
 				let map = new Map(Object.entries(tag));
 
@@ -238,7 +257,8 @@
 				let text = {
 					"审核中": false,
 					"已发布": '下架',
-					"已下架": '重新发布'
+					"已下架": '重新发布',
+					"审核失败": '重新发布'
 				};
 
 				let map = new Map(Object.entries(text));
@@ -260,11 +280,12 @@
 			this.$bus.$off('pageNumber'); //解绑页码点击事件
 		}
 	}
+	
 </script>
 
 <style scoped lang="less">
 	@import "@/styles/index";
-	
+
 	.article-management {
 		.artcleMegStyle();
 	}

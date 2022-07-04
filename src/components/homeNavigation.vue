@@ -13,7 +13,7 @@
 				</template>
 				<el-menu-item index="/Home/publishArticle">发表文章</el-menu-item>
 				<el-menu-item index="/Home/articleManagement">文章管理</el-menu-item>
-				<el-menu-item index="/Home/CommentManagement">评论管理</el-menu-item>
+				<el-menu-item index="/Home/commentManagement">评论管理</el-menu-item>
 				<el-menu-item index="/Home/articleVerify">文章审核</el-menu-item>
 			</el-submenu>
 			<el-submenu index="3">
@@ -21,8 +21,8 @@
 					<i class="el-icon-user"></i>
 					<span>机构管理</span>
 				</template>
-				<el-menu-item index="/Home/publishArticle">用户管理</el-menu-item>
-				<el-menu-item index="/Home/articleManagement">角色管理</el-menu-item>
+				<el-menu-item index="/Home/userManagement">用户管理</el-menu-item>
+				<el-menu-item index="/Home/userAssignments">角色管理</el-menu-item>
 				<el-menu-item index="/Home/publishArticle">账号申请</el-menu-item>
 			</el-submenu>
 			<el-menu-item index="#">
