@@ -28,35 +28,61 @@
 
 <script>
 	import changePermissionsDialog from './components/changePermissionsDialog'
+	import {getPermissionInfoApi} from '@/request/api'
 	export default {
 		name: 'UserAssignments', //用户分配
 		data() {
 			return {
-				roleTable: [{
-					roleKey:1,
-					role: 'admin',
-					name: '超级管理员',
-					Description: '超级管理员，拥有所有权限的，唯一的账号'
-				},
-				{
-					roleKey:2,
-					role: 'manager',
-					name: '普通管理员',
-					Description: '普通管理员，拥有文章审批，用户密码修改，发布文章权限'
-				},
-				{
-					roleKey:3,
-					role: 'editor',
-					name: '编辑者',
-					Description: '作者，发表文章权限'
-				}]
+				roleTable:[],
+				resData:[]
 			};
 		},
 		methods: {
 			changeRole(row){
-				console.log(row)
-				this.$refs['changePermissions'].permissionsVisible=true;
+				const permissionsDialog=this.$refs['changePermissions'];
+				permissionsDialog.permissionsVisible=true;
+				
+				//显示可以分配的权限列表
+				const option = this.resData.permissionNameList;
+				let set = new Set();
+				for (let i = 0; i < option.length; i++) {
+					set.add({
+						key: i + 1,
+						label: option[i]
+					})
+				}
+				permissionsDialog.data= Array.from(set);
+				
+				for(let item of this.resData.roleList){//循环获取 所选的角色拥有的权限 
+					if(item.accountType==row.role){
+						permissionsDialog.value=item.permissionList;//赋值已经拥有的权限
+					}
+				}
+			},
+			initRoleInfo(){//初始化数据
+				getPermissionInfoApi().then((res)=>{
+					let data=res.data.roleList;
+					//中文转义
+					let changeChineseName={"admin":"超级管理员","manager":"普通管理员","editor":"编辑者"};
+					const map=new Map(Object.entries(changeChineseName));//存储中文转义的数组方便查找
+					
+					let roleTable=[];
+					for(let i=0;i<data.length;i++){//重组数据结构，为页面渲染准备
+						roleTable.push({
+							roleKey:i+1,
+							role: data[i].accountType,
+							permissionList:data[i].permissionList,
+							name: map.get(data[i].accountType),
+							Description:data[i].Description
+						})
+					}
+					this.roleTable=roleTable;
+					this.resData=res.data;
+				});
 			}
+		},
+		mounted() {
+			this.initRoleInfo();
 		},
 		components: {
 			changePermissionsDialog

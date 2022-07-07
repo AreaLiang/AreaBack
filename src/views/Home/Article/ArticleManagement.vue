@@ -133,7 +133,7 @@
 			}
 		},
 		methods: {
-			handleEdit(index, row) {
+			handleEdit(index, row) {//点击修改文章事件，转跳到发布页面修改
 				this.$router.push({
 					name: 'PublishArticle',
 					params: {
@@ -142,7 +142,7 @@
 				})
 			},
 			handleDelete(index, row) {//单项文章删除
-				
+				this.deleteFun({id:row.id})
 			},
 			batchDeletion() {//批量删除
 			
@@ -156,10 +156,7 @@
 				
 					this.deleteFun({delList: set})
 				} else {
-					this.$message({
-						message: '没有选中任何选项',
-						type: 'warning'
-					});
+					this.failMes('没有选中任何选项');
 				}
 			},
 			handleDown(index, row) {
@@ -167,40 +164,36 @@
 				let opcode = row.status == '已发布' ? -1 : 1;
 				let mes = row.status == '已发布' ? '下架' : '重新发布'
 
-				this.$confirm(`此操作将${mes}该文章, 是否继续?`, '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
+				const downFun= () =>{
 					artMegDownApi({
 						id: row.id,
 						opcode: opcode
 					}).then((res) => {
 						if (res.code == '200') {
-							this.getArtcleMgeData();
-							this.$message({
-								type: 'success',
-								message: `${mes}成功!`
-							});
-						} else {
-							this.$message({
-								type: 'warning',
-								message: `${mes}失败!`
-							});
-						}
+							this.getArtcleMgeData();//页面重新渲染
+							
+							this.successMes(mes);//提示信息
+						} else this.failMes(mes)
 					});
-				}).catch(e => e);
+				}
+				
+				//确认 发布和下架 提示框
+				this.confirmMes(downFun,mes)();
 			},
 			searchSubmit() {//搜索提交 功能
 				this.articleQueryForm.dateRange = [...this.$refs['datePicker'].dateRange];
-				articleMgeSearchApi({
-					page: this.page,
-					number: this.number,
-					searchList: JSON.stringify(this.articleQueryForm)
-				}).then((res) => {
-					this.tableData = Object.values(res.data);
-					this.dataTotal = parseInt(res.list) * this.number;
-				});
+				const searchFun= () => {//搜索接口调用
+					articleMgeSearchApi({
+						page: this.page,
+						number: this.number,
+						searchList: JSON.stringify(this.articleQueryForm)
+					}).then((res) => {
+						this.tableData = Object.values(res.data);
+						this.dataTotal = parseInt(res.list) * this.number;
+					});
+				}
+				//加入防抖函数
+				this.debounce(searchFun)();
 			},
 			handleSelectionChange(val) { //点击多选按钮
 				this.multipleSelection = val;
@@ -218,26 +211,19 @@
 				});
 			},
 			deleteFun(data){//删除功能
-				this.$confirm(`此操作将删除该文章, 是否继续?`, '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
+			
+				const delfun=() => {
 					artMegDelApi(data).then((res) => {
 						if (res.code == '200') {
 							this.searchSubmit();
-							this.$message({
-								type: 'success',
-								message: `删除成功!`
-							});
+							this.successMes('删除');//提示信息
 						} else {
-							this.$message({
-								type: 'warning',
-								message: `删除失败!`
-							});
+							this.failMes('删除');
 						}
 					});
-				}).catch(e => e);
+				}
+				//确认删除提示框
+				this.confirmMes(delfun,"删除该文章")();
 			}
 		},
 		filters: {

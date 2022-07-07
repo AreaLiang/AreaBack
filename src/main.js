@@ -22,6 +22,10 @@ import store from '@/store'
 import * as echarts from 'echarts/core';
 Vue.prototype.echarts=echarts
 
+//引入全局的函数
+import base from '@/utils/base.js'
+Vue.use(base);
+
 // 引入柱状图图表，图表后缀都为 Chart
 import { BarChart , LineChart ,PieChart } from 'echarts/charts';
 // 引入提示框，标题，直角坐标系，数据集，内置数据转换器组件，组件后缀都为 Component

@@ -58,7 +58,7 @@
 			}
 		},
 		methods: {
-			publish(formName) {
+			publish(formName) {//发布文章
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						
@@ -79,20 +79,14 @@
 							}).then((res) => {
 								console.log(res)
 								if(res.code="200"){
-									this.$message({
-										message:'发布成功',
-										type: 'success'
-									})
+									this.successMes('发布')
 								}else{
-									this.$message({
-										message:'发布失败',
-										type: 'warning'
-									})
+									this.failMes('发布')
 								}
 							});
 						};
 						
-						throttle(publishFun)();//节流函数，1秒内只能提交一次
+						this.confirmMes(publishFun,'发布文章')();//提示确认发布操作
 					} else {
 						console.log('error submit!!');
 						return false;

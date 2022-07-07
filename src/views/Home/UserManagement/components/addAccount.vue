@@ -1,13 +1,13 @@
 <template>
 	<div class="check-original">
-		<el-dialog title="添加账户" :visible.sync="addAccountVisible" width="40%" center :destroy-on-close="true">
+		<el-dialog title="添加账户" :visible.sync="addAccountVisible" width="40%" center @close='close' @open='open'>
 			<div class="show-box">
 				<el-form :model="addInfoForm" :rules="rules" ref="addInfoForm" label-position="left">
 					<el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
-						<el-input v-model="addInfoForm.name" autocomplete="off"></el-input>
+						<el-input v-model="addInfoForm.name" autocomplete="off" :disabled="opCode==0"></el-input>
 					</el-form-item>
 					<el-form-item label="账号" :label-width="formLabelWidth" prop="account">
-						<el-input v-model="addInfoForm.account" autocomplete="off"></el-input>
+						<el-input v-model="addInfoForm.account" autocomplete="off" :disabled="opCode==0"></el-input>
 					</el-form-item>
 					<el-form-item label="密码" :label-width="formLabelWidth" prop="password">
 						<el-input v-model="addInfoForm.password" autocomplete="off" show-password></el-input>
@@ -23,12 +23,8 @@
 </template>
 
 <script>
-	import {
-		addAccountApi
-	} from '@/request/api'
-	import {
-		nanoid
-	} from 'nanoid'
+	import {addAccountApi , modifyAccount_PERApi} from '@/request/api'
+	import {nanoid} from 'nanoid'
 	export default {
 		name: 'addAccount', //添加账号
 		data() {
@@ -56,43 +52,58 @@
 						message: '请输入密码',
 						trigger: 'blur'
 					}]
-				}
+				},
+				opCode:1
 			}
 		},
 		methods: {
 			addAcount(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						addAccountApi({
-							account: this.addInfoForm.account,
-							password: this.addInfoForm.password,
-							name: this.addInfoForm.name,
-							id: nanoid(4)
-						}).then((res) => {
-							if (res.code = "200") {
-								this.addAccountVisible = false;
-								this.$emit('getAccountList');
-								this.$refs['addInfoForm'].resetFields();
-								this.$message({
-									type: 'success',
-									message: '添加成功'
-								})
-							} else {
-								this.$message({
-									type: 'danger',
-									message: '添加失败'
-								})
-							}
-						});
+						if(this.opCode==1){
+							let {account,password,name}=this.addInfoForm;
+							addAccountApi({
+								account: account,
+								password: password,
+								name: name,
+								id: nanoid(4)
+							}).then((res) => {
+								if (res.code = "200") {
+									this.addAccountVisible = false;
+									this.$emit('getAccountList');
+									this.successMes('添加');
+								} else {
+									this.failMes('添加');
+								}
+							});
+						}else if(this.opCode==0){
+							let {id,password}=this.addInfoForm
+							modifyAccount_PERApi({
+								id:id,
+								password:password
+							}).then((res)=>{
+								if(res.code="200"){
+									this.addAccountVisible = false;
+									this.$emit('getAccountList');
+									this.successMes('修改');
+								}
+							})
+						}
+						
 					}
 				});
+			},
+			close(){//关闭后重置表单
+				this.$refs['addInfoForm'].resetFields();
+			},
+			open(){
+				this.$nextTick(()=>{
+					Object.assign(this.addInfoForm,this.currentRow)
+				})
 			}
 		},
-		mounted() {
-			
-		},
-		props: ['articleInfo']
-
+		props: ['articleInfo','currentRow']
+		
 	}
 </script>
 

@@ -18,28 +18,11 @@
 	export default {
 		name: 'changePermissionsDialog', //更改权限弹窗
 		data() {
-			const generateData = _ => {
-				const option = ["审核文章", "添加账号", "发布文章", "所有文章管理", "账号申请审批"];
-				let set = new Set();
-				for (let i = 0; i < option.length; i++) {
-					set.add({
-						key: i + 1,
-						label: option[i]
-					})
-				}
-				return Array.from(set);
-			};
 			return {
-				data: generateData(),
+				data: [],
 				value: [],
 				permissionsVisible: false
 			}
-		},
-		methods: {
-
-		},
-		components: {
-
 		}
 	}
 </script>

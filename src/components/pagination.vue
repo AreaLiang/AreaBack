@@ -6,6 +6,7 @@
 		 -->
 		<el-pagination background layout="prev, pager, next" :total="dataTotal" :page-size="pageSize ? pageSize:10" @current-change="pageChange">
 		</el-pagination>
+		
 	</div>
 </template>
 
