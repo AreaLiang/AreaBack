@@ -12,7 +12,7 @@ export const constantRoutes = [{
 		path: '/',
 		redirect: '/Login'
 	},
-	{//登录界面
+	{ //登录界面
 		name: 'Login',
 		path: '/Login',
 		meta: {
@@ -20,7 +20,7 @@ export const constantRoutes = [{
 		},
 		component: () => import('@/views/Login')
 	},
-	{//主页用户数据
+	{ //主页用户数据
 		name: 'Home',
 		path: '/Home',
 		meta: {
@@ -28,42 +28,28 @@ export const constantRoutes = [{
 		},
 		component: () => import('@/views/Home/Home'),
 		children: [{
-			name: 'UserData',
-			path: 'userData',
-			component: () => import('@/views/Home/UserData/UserData')
-		}]
+				name: 'UserData',
+				path: 'userData',
+				component: () => import('@/views/Home/UserData/UserData')
+			},
+			{ //发布文章
+				name: 'PublishArticle',
+				path: 'publishArticle',
+				component: () => import('@/views/Home/Article/PublishArticle')
+			},
+			{ //文章管理
+				name: 'ArticleManagement',
+				path: 'articleManagement',
+				component: () => import('@/views/Home/Article/ArticleManagement')
+			},
+			{ //评论管理
+				name: 'CommentManagement',
+				path: 'commentManagement',
+				component: () => import('@/views/Home/Article/CommentManagement')
+			}
+		]
 	},
-	{//发布文章
-		name: 'Home',
-		path: '/Home',
-		component: () => import('@/views/Home/Home'),
-		children: [{
-			name: 'PublishArticle',
-			path: 'publishArticle',
-			component: () => import('@/views/Home/Article/PublishArticle')
-		}]
-	},
-	{//文章管理
-		name: 'Home',
-		path: '/Home',
-		component: () => import('@/views/Home/Home'),
-		children: [{
-			name: 'ArticleManagement',
-			path: 'articleManagement',
-			component: () => import('@/views/Home/Article/ArticleManagement')
-		}]
-	},
-	{//评论管理
-		name: 'Home',
-		path: '/Home',
-		component: () => import('@/views/Home/Home'),
-		children: [{
-			name: 'CommentManagement',
-			path: 'commentManagement',
-			component: () => import('@/views/Home/Article/CommentManagement')
-		}]
-	},
-	{//文章审核
+	{ //文章审核
 		name: 'Home',
 		path: '/Home',
 		component: () => import('@/views/Home/Home'),
@@ -73,7 +59,7 @@ export const constantRoutes = [{
 			component: () => import('@/views/Home/Article/articleVerify')
 		}]
 	},
-	{//用户管理
+	{ //用户管理
 		name: 'Home',
 		path: '/Home',
 		component: () => import('@/views/Home/Home'),
@@ -83,7 +69,7 @@ export const constantRoutes = [{
 			component: () => import('@/views/Home/UserManagement/UserManagement')
 		}]
 	},
-	{//用户权限分配
+	{ //用户权限分配
 		name: 'Home',
 		path: '/Home',
 		component: () => import('@/views/Home/Home'),
@@ -93,45 +79,41 @@ export const constantRoutes = [{
 			component: () => import('@/views/Home/UserManagement/UserAssignments')
 		}]
 	}
-	
-	
 ]
 
 
 
 // 异步挂载的路由
 // 动态需要根据权限加载的路由表
-// export const asyncRouter = [{
-// 	path: '/Home',
-// 	component: () => import('@/views/HomePage'),
-// 	children: [{
-// 		name: 'businessEntrust',
-// 		path: 'businessEntrust',
-// 		meta: {
-// 			isAuthority: "正常",
-// 			headName: ['委托单管理', '/', ' 详细业务'],
-// 			title: '业务大厅'
-// 		},
-// 		component: () => import('@/views/businessEntrust/bsEntrust')
-// 	}, {
-// 		name: 'mgCertificate',
-// 		path: 'mgCertificate',
-// 		meta: {
-// 			isAuthority: "正常",
-// 			headName: ['证书管理', '/', ' 详情'],
-// 			title: '业务大厅'
-// 		},
-// 		component: () => import('@/views/certificateManagement/mgCertificate')
-// 	}, {
-// 		name: 'entrustTbDownload',
-// 		path: 'entrustTb',
-// 		meta: {
-// 			isAuthority: "正常",
-// 			title: '业务大厅'
-// 		},
-// 		component: () => import('@/views/entrustTbDownload/entrustTbDL')
-// 	}]
-// }]
+export const asyncRouter = [{
+	path: '/Home',
+	component: () => import('@/views/Home/Home'),
+	children: [{ //用户管理
+			name: 'UserManagement',
+			path: 'userManagement',
+			meta: {
+				role: ['admin', 'super_editor']
+			},
+			component: () => import('@/views/Home/UserManagement/UserManagement')
+		},
+		{ //用户权限分配
+			name: 'UserAssignments',
+			path: 'userAssignments',
+			meta: {
+				role: ['admin']
+			},
+			component: () => import('@/views/Home/UserManagement/UserAssignments')
+		},
+		{ //文章审核
+			name: 'ArticleVerify',
+			path: 'articleVerify',
+			meta: {
+				role: ['admin', 'super_editor']
+			},
+			component: () => import('@/views/Home/Article/articleVerify')
+		}
+	]
+}]
 
 //错误提示的路由
 // export const errorRouter = [

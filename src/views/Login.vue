@@ -5,7 +5,7 @@
 				<p class="title">欢迎来到Area登录界面</p>
 				<el-form :model="loginForm" :rules="rules" ref="loginForm" style="width: 320px;">
 					<el-form-item prop="accound">
-						<el-input placeholder="请输入账号" v-model="loginForm.accound" class="bc-input">
+						<el-input placeholder="请输入账号" v-model="loginForm.account" class="bc-input">
 							<el-button slot="prepend" icon="el-icon-user cfu-icon"></el-button>
 						</el-input>
 					</el-form-item>
@@ -26,16 +26,17 @@
 
 <script>
 	import loginBackground from '@/components/loginBackground'
+	import {loginApi} from '@/request/api'
 	export default {
 		name: 'Login', //登录界面
 		data() {
 			return {
 				loginForm: {
-					accound: '1',
+					account: '1',
 					password: '1'
 				},
 				rules: {
-					accound: [{
+					account: [{
 						required: true,
 						message: '请输入账号',
 						trigger: 'blur'
@@ -52,8 +53,13 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						console.log('submit!');
-						this.$router.push('/Home');
+						loginApi({
+							account:this.loginForm.account,
+							password:this.loginForm.password
+						}).then((res)=>{
+							console.log(res)
+						});
+						// this.$router.push('/Home');
 					}
 				});
 			},

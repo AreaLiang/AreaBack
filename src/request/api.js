@@ -1,6 +1,7 @@
 import { get, post ,formDatapost} from './http'
 
 //登录和注册页面
+export const loginApi = p => formDatapost('/areaBackLogin', p);
 export const uploadApi = p => formDatapost('/upload', p);
 
 /*主页*/
