@@ -1,10 +1,11 @@
 import { get, post ,formDatapost} from './http'
 
 //登录和注册页面
-export const loginApi = p => formDatapost('/areaBackLogin', p);
-export const uploadApi = p => formDatapost('/upload', p);
+export const loginApi = p => post('/areaBackLogin', p);
 
 /*主页*/
+//校验用户信息
+export const checkUserInfoApi = p => post('/areaBackCheckUserInfo', p);//发布文章
 //文章管理
 export const publishArticleApi = p => post('/hotList', p);//发布文章
 export const articleManagementApi = p => post('/articleManagement', p);//文章管理数据

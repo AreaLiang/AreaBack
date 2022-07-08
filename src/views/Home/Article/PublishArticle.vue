@@ -79,9 +79,9 @@
 							}).then((res) => {
 								console.log(res)
 								if(res.code="200"){
-									this.successMes('发布')
+									this.$message.success('发布')
 								}else{
-									this.failMes('发布')
+									this.$message.warning('发布')
 								}
 							});
 						};

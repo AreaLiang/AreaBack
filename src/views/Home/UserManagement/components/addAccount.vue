@@ -71,9 +71,9 @@
 								if (res.code = "200") {
 									this.addAccountVisible = false;
 									this.$emit('getAccountList');
-									this.successMes('添加');
+									this.$message.success('添加');
 								} else {
-									this.failMes('添加');
+									this.$message.warning('添加');
 								}
 							});
 						}else if(this.opCode==0){
@@ -85,7 +85,7 @@
 								if(res.code="200"){
 									this.addAccountVisible = false;
 									this.$emit('getAccountList');
-									this.successMes('修改');
+									this.$message.success('修改');
 								}
 							})
 						}

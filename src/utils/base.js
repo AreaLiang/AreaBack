@@ -20,29 +20,7 @@ export default function(Vue, options) {
 			}).catch(e => e);
 		}
 	}
-	
-	/**
-	 *  elementUI 中的message 方法,成功提示信息
-	 * @param {String} mes [提示信息]
-	 */
-	Vue.prototype.successMes =function(mes = ''){
-		Message({
-			type:'success',
-			message:mes+'成功'
-		});
-	}
-	
-	/**
-	 *  elementUI中的message 方法,失败提示信息
-	 * @param {String} mes [提示信息]
-	 */
-	Vue.prototype.failMes =function(mes = ''){
-		Message({
-			type:'warning',
-			message:mes+'失败'
-		});
-	}
-	
+
 	/**
 	 * 防抖
 	 * @param {Function} fn [要执行方法]

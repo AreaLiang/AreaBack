@@ -156,7 +156,7 @@
 				
 					this.deleteFun({delList: set})
 				} else {
-					this.failMes('没有选中任何选项');
+					this.$message.warning('没有选中任何选项');
 				}
 			},
 			handleDown(index, row) {
@@ -172,8 +172,8 @@
 						if (res.code == '200') {
 							this.getArtcleMgeData();//页面重新渲染
 							
-							this.successMes(mes);//提示信息
-						} else this.failMes(mes)
+							this.$message.success(mes);//提示信息
+						} else this.$message.warning(mes)
 					});
 				}
 				
@@ -216,9 +216,9 @@
 					artMegDelApi(data).then((res) => {
 						if (res.code == '200') {
 							this.searchSubmit();
-							this.successMes('删除');//提示信息
+							this.$message.success('删除');//提示信息
 						} else {
-							this.failMes('删除');
+							this.$message.warning('删除');
 						}
 					});
 				}

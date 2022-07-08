@@ -23,16 +23,21 @@ router.beforeEach(async (to, from, next) => {
 		if (to.path === "/Login") {
 			next()
 		} else {
-			
+			//判断vuex里面是否有存在用户信息，没有则重新请求发送获取和验证
+			const hasRole= JSON.stringify(store.state.user.userInfo) === '{}';
+			console.log("565",{...store.state.user})
+			if(hasRole){
+				store.dispatch('user/checkUserInfo',hasToken);
+			}else next();
 		}
-		
+		NProgress.done();
 	}else{
 		if (whiteList.has(to.path)) {//如果在白名单内则通过
-		  next()
+		  next();
 		} else {
 		  router.push('/Login');
 		}
-		NProgress.done()
+		NProgress.done();
 	}
 	
 });

@@ -57,9 +57,16 @@
 							account:this.loginForm.account,
 							password:this.loginForm.password
 						}).then((res)=>{
-							console.log(res)
+							console.log(res);
+							if(res.code=="200"){
+								let {token,data}=res;
+								localStorage.setItem('token',token);
+								this.$store.commit('user/setUserInfo',res);
+								this.$router.push('/Home');
+							}else{
+								this.$message.warning('账号或密码错误');
+							}
 						});
-						// this.$router.push('/Home');
 					}
 				});
 			},
