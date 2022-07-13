@@ -142,11 +142,12 @@
 				})
 			},
 			handleDelete(index, row) {//单项文章删除
+				this.loading = true;
 				this.deleteFun({id:row.id})
 			},
 			batchDeletion() {//批量删除
-			
 				if (this.multipleSelection.length > 0) {
+					this.loading = true;
 					let set=new Set();
 					let multipleSelection=JSON.parse(JSON.stringify(this.multipleSelection));
 					for(let item of multipleSelection){
@@ -181,6 +182,7 @@
 				this.confirmMes(downFun,mes)();
 			},
 			searchSubmit() {//搜索提交 功能
+				this.loading = true;
 				this.articleQueryForm.dateRange = [...this.$refs['datePicker'].dateRange];
 				const searchFun= () => {//搜索接口调用
 					articleMgeSearchApi({
@@ -190,6 +192,7 @@
 					}).then((res) => {
 						this.tableData = Object.values(res.data);
 						this.dataTotal = parseInt(res.list) * this.number;
+						this.loading = false;
 					});
 				}
 				//加入防抖函数
@@ -199,13 +202,23 @@
 				this.multipleSelection = val;
 			},
 			getArtcleMgeData() { //获取页面的文章管理数据
+				
 				articleManagementApi({
 					page: this.page,
 					number: this.number,
 				}).then((res) => {
-					this.tableData = Object.values(res.data);
-					this.dataTotal = parseInt(res.list) * this.number;
-					this.loading = false;
+					console.log(res)
+					if(res.code=="-1"){
+						this.$message.warning(res.mes);
+						localStorage.removeItem('token');
+						setTimeout(()=>{
+							this.$router.push("/Login")
+						},500)
+					}else if(res.code=="200"){
+						this.tableData = Object.values(res.data);
+						this.dataTotal = parseInt(res.list) * this.number;
+						this.loading = false;
+					}
 				}).catch((e) => {
 					this.loading = false
 				});

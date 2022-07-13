@@ -46,48 +46,20 @@ export const constantRoutes = [{
 				name: 'CommentManagement',
 				path: 'commentManagement',
 				component: () => import('@/views/Home/Article/CommentManagement')
-			}
+			},
+			
 		]
-	},
-	{ //文章审核
-		name: 'Home',
-		path: '/Home',
-		component: () => import('@/views/Home/Home'),
-		children: [{
-			name: 'ArticleVerify',
-			path: 'articleVerify',
-			component: () => import('@/views/Home/Article/articleVerify')
-		}]
-	},
-	{ //用户管理
-		name: 'Home',
-		path: '/Home',
-		component: () => import('@/views/Home/Home'),
-		children: [{
-			name: 'UserManagement',
-			path: 'userManagement',
-			component: () => import('@/views/Home/UserManagement/UserManagement')
-		}]
-	},
-	{ //用户权限分配
-		name: 'Home',
-		path: '/Home',
-		component: () => import('@/views/Home/Home'),
-		children: [{
-			name: 'UserAssignments',
-			path: 'userAssignments',
-			component: () => import('@/views/Home/UserManagement/UserAssignments')
-		}]
 	}
 ]
-
-
 
 // 异步挂载的路由
 // 动态需要根据权限加载的路由表
 export const asyncRouter = [{
 	path: '/Home',
 	component: () => import('@/views/Home/Home'),
+	meta: {
+		role: ['admin', 'super_editor','editor']
+	},
 	children: [{ //用户管理
 			name: 'UserManagement',
 			path: 'userManagement',
@@ -116,32 +88,27 @@ export const asyncRouter = [{
 }]
 
 //错误提示的路由
-// export const errorRouter = [
-// 	{
-// 		name:'error',
-// 		path: "/404",
-// 		component: () => import('@/components/error-page/error404')
-// 	},
-// 	{
-// 		name:'error2',
-// 		path: "*",
-// 		redirect: '404',
-// 	},
-// 	{
-// 		name:'error3',
-// 		path: '/Home',
-// 		component: () => import('@/views/HomePage'),
-// 		children: [{
-// 				path: "404",
-// 				component: () => import('@/components/error-page/error404')
-// 			},
-// 			{
-// 				path: "*",
-// 				redirect: '404',
-// 			}
-// 		]
-// 	}
-// ]
+export const errorRouter = [
+	{
+		name: 'error',
+		path: "*",
+		component: () => import('@/components/error-page/error404')
+	},
+	{
+		name: 'error3',
+		path: '/Home',
+		component: () => import('@/views/Home/Home'),
+		children: [{
+				path: "404",
+				component: () => import('@/components/error-page/error404')
+			},
+			{
+				path: "*",
+				redirect: '404',
+			}
+		]
+	}
+]
 
 const createRouter = () => new VueRouter({
 	mode: 'hash',

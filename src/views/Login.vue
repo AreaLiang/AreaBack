@@ -59,13 +59,22 @@
 						}).then((res)=>{
 							console.log(res);
 							if(res.code=="200"){
-								let {token,data}=res;
-								localStorage.setItem('token',token);
-								this.$store.commit('user/setUserInfo',res);
-								this.$router.push('/Home');
+								(async () => {
+									let {token,data}=res;
+									localStorage.setItem('token',token);//获取token
+									this.$store.commit('user/setUserInfo',res);//保存用户信息在Vuex
+									let routesList=await this.$store.dispatch('user/generateRoutes',data.accountType);//动态路由表申请
+									routesList.forEach( p => this.$router.addRoute(p)) //添加路由表
+									
+									// this.$router.addRoute(...routesList) //添加路由表
+									this.$router.push('/Home/userData');
+								})()
 							}else{
 								this.$message.warning('账号或密码错误');
 							}
+						}).catch((e)=>{
+							console.log(e)
+							this.$message.error('服务出错');
 						});
 					}
 				});

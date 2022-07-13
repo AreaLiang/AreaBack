@@ -148,7 +148,7 @@
 					page: this.page,
 					number: this.number
 				}).then((res)=>{
-					console.log({...res.data})
+					console.log(res)
 					this.tableData=Object.values(res.data);
 				});
 			}

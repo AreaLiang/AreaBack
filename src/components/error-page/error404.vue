@@ -29,23 +29,25 @@
 	}
 </script>
 <style lang="less" scoped>
-	@import '@/less/common';
 	.wscn-http404-container{
 		height: 100%;
 	}
 	.pic-404 {
-		width: 500px;
+		width: 100%;
 		height: 350px;
-
+		text-align: center;
 		.pic-404__parent {
 			height: 100%;
-			width: 100%;
+			width: 500px;
 		}
 	}
 
 	.wscn-http404 {
 		overflow: hidden;
-		.pu_center
+		top: 50%;
+		left: 50%;
+		position: relative;
+		transform: translate(-50%,-50%);
 	}
 
 	.bullshit {
