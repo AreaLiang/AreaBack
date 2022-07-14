@@ -100,7 +100,6 @@
 	
 	.user-data{
 		height: 100%;
-		overflow: auto;
 	}
 	.type-item {
 		margin-top: 20px;

@@ -11,15 +11,22 @@ export default {
 				context.commit('setUserInfo', res);
 			});
 		},
-		generateRoutes(context, roles) { //生成路由表
-			getPermissionInfoApi().then((res)=>{
-				console.log("ser",res.data.roleList)
+		generateRoutes(context, roleID) { //生成路由表
+			return getPermissionInfoApi().then((res)=>{
+				let roleList=res.data.roleList;
+				
+				roleList=roleList.filter((p)=>{
+					return p.accountType==roleID;
+				});
+				let permissionList=Object.assign({},...roleList).permissionList;
+				
+				const accessRoutes=filterAsyncRoutes(asyncRouter, permissionList);
+				accessRoutes.push(...errorRouter);
+				
+				context.commit('SavePermissionList',permissionList);
+				context.commit('GenerateRoutes',accessRoutes);
+				return Promise.resolve(accessRoutes);
 			});
-			const accessRoutes=filterAsyncRoutes(asyncRouter, roles);
-			accessRoutes.push(...errorRouter);
-
-			context.commit('GenerateRoutes',accessRoutes);
-			return Promise.resolve(accessRoutes);
 		}
 	},
 	mutations: {
@@ -30,12 +37,16 @@ export default {
 		},
 		GenerateRoutes(state, val){
 			state.routesList=val;
+		},
+		SavePermissionList(state, val){
+			state.permissionList=val;
 		}
 	},
 	state: {
 		token: '',
 		userInfo: {},
 		routesList:{},
+		permissionList:{}
 	},
 	gutters: {
 
@@ -45,22 +56,23 @@ export default {
 /**
  * 过滤 路由权限表
  * @param {Array} routes [动态路由表]
- * @param {String} roles [身份权限]
+ * @param {Array} permissionList [身份权限表]
  */
-function filterAsyncRoutes(routes, roles) {
-	
-	let routesList,isRole;
-	routesList = routes.filter((p) => {//第一层过滤是否有权限的访问的路由
-		isRole=p.meta.role.includes(roles);
+
+function filterAsyncRoutes(routes,permissionList) {
+	let routesList=new Set(permissionList);
+	let newRoutes,isRole;
+	newRoutes=routes.filter((p)=>{//第一层过滤是否有权限
+		isRole=routesList.has(p.meta.roleID);
 		if(isRole){
 			if(p.children){//判断是否有children
 				p.children=p.children.filter((item)=>{//children再次过滤是否有权限的访问的路由
-					return item.meta.role.includes(roles);
+					return routesList.has(item.meta.roleID);
 				})
 			}
 			return true;
-		}else false
+		}else false;
 	});
 	
-	return routesList;
+	return newRoutes;
 }

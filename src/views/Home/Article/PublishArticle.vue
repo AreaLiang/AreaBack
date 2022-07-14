@@ -146,12 +146,12 @@
 	}
 
 	.publish-article {
-		overflow: auto;
 		height: 100%;
 
 		.warp {
 			width: 98%;
 			margin: 15px auto;
+			padding-bottom: 75px;
 		}
 
 		.pu-style {

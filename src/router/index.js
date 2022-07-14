@@ -46,8 +46,7 @@ export const constantRoutes = [{
 				name: 'CommentManagement',
 				path: 'commentManagement',
 				component: () => import('@/views/Home/Article/CommentManagement')
-			},
-			
+			}
 		]
 	}
 ]
@@ -58,13 +57,13 @@ export const asyncRouter = [{
 	path: '/Home',
 	component: () => import('@/views/Home/Home'),
 	meta: {
-		role: ['admin', 'super_editor','editor']
+		roleID: 1
 	},
 	children: [{ //用户管理
 			name: 'UserManagement',
 			path: 'userManagement',
 			meta: {
-				role: ['admin', 'super_editor']
+				roleID: 201
 			},
 			component: () => import('@/views/Home/UserManagement/UserManagement')
 		},
@@ -72,7 +71,7 @@ export const asyncRouter = [{
 			name: 'UserAssignments',
 			path: 'userAssignments',
 			meta: {
-				role: ['admin']
+				roleID: 202
 			},
 			component: () => import('@/views/Home/UserManagement/UserAssignments')
 		},
@@ -80,7 +79,7 @@ export const asyncRouter = [{
 			name: 'ArticleVerify',
 			path: 'articleVerify',
 			meta: {
-				role: ['admin', 'super_editor']
+				roleID: 101
 			},
 			component: () => import('@/views/Home/Article/articleVerify')
 		}

@@ -27,6 +27,7 @@
 <script>
 	import loginBackground from '@/components/loginBackground'
 	import {loginApi} from '@/request/api'
+	import {resetRouter} from '@/router'
 	export default {
 		name: 'Login', //登录界面
 		data() {
@@ -64,9 +65,10 @@
 									localStorage.setItem('token',token);//获取token
 									this.$store.commit('user/setUserInfo',res);//保存用户信息在Vuex
 									let routesList=await this.$store.dispatch('user/generateRoutes',data.accountType);//动态路由表申请
+									console.log('Login',routesList)
+									resetRouter();
 									routesList.forEach( p => this.$router.addRoute(p)) //添加路由表
-									
-									// this.$router.addRoute(...routesList) //添加路由表
+								
 									this.$router.push('/Home/userData');
 								})()
 							}else{
