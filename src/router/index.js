@@ -24,13 +24,14 @@ export const constantRoutes = [{
 		name: 'Home',
 		path: '/Home',
 		meta: {
-			title: 'Area后台功能界面'
+			title: 'Area后台功能界面',
+			roleID: 1
 		},
 		component: () => import('@/views/Home/Home'),
 		children: [{
 				name: 'UserData',
 				path: 'userData',
-				component: () => import('@/views/Home/UserData/UserData')
+				component: () => import('@/views/Home/UserData/UserData'),
 			},
 			{ //发布文章
 				name: 'PublishArticle',
@@ -67,7 +68,7 @@ export const asyncRouter = [{
 			},
 			component: () => import('@/views/Home/UserManagement/UserManagement')
 		},
-		{ //用户权限分配
+		{ //角色管理
 			name: 'UserAssignments',
 			path: 'userAssignments',
 			meta: {

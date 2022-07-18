@@ -53,7 +53,7 @@ export default function(Vue, options) {
 	 * @param {Function} fn [要执行方法]
 	 * @param {Number} interval [豪秒数，规定在一个单位时间内，只能触发一次函数]
 	 * @param {Object} options [leading表示首次是否触发,trailing 是否只需要有一个定时器]
-	 * 调用方法 debounce(fn,delay,true)(x,y)，勾销性能 => (debounce(fn,delay).cancel)(x,y)
+	 * 调用方法 throttle(fn,delay,true)(x,y)
 	 */
 	
 	// 记录上一次的开始的时间

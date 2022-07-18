@@ -94,7 +94,7 @@
 				number: 9,
 				dataTotal: 0,
 				loading:false,
-				currentRow:1
+				currentRow:1,
 			}
 		},
 		methods: {
@@ -148,7 +148,7 @@
 					page: this.page,
 					number: this.number
 				}).then((res)=>{
-					console.log(res)
+					this.loading=false;
 					this.tableData=Object.values(res.data);
 				});
 			}
@@ -165,6 +165,7 @@
 			}
 		},
 		mounted(){
+			this.loading=true;
 			this.getAccountList();
 		},
 		components: {

@@ -29,6 +29,7 @@
 <script>
 	import changePermissionsDialog from './components/changePermissionsDialog'
 	import {getPermissionInfoApi} from '@/request/api'
+	import {mapState} from 'vuex'
 	export default {
 		name: 'UserAssignments', //用户分配
 		data() {
@@ -41,29 +42,46 @@
 			changeRole(row){
 				const permissionsDialog=this.$refs['changePermissions'];
 				permissionsDialog.permissionsVisible=true;
-				
+
 				//显示可以分配的权限列表
 				const option = this.resData.permissionNameList;
-				let set = new Set();
-				for (let i = 0; i < option.length; i++) {
-					set.add({
-						key: i + 1,
-						label: option[i]
-					})
-				}
-				permissionsDialog.data= Array.from(set);
+		
+				let map = new Map();
+				option[0].child.forEach((p)=>{
+					if(!p.roles){
+						if(p.child){
+							p.child.forEach((item)=>{
+								if(item.roles){
+									map.set(item.id,item.name)
+								}
+							})
+						}
+					}else map.set(p.id,p.name)
+				})
+			
+				let newData=[];
 				
-				for(let item of this.resData.roleList){//循环获取 所选的角色拥有的权限 
-					if(item.accountType==row.role){
-						permissionsDialog.value=item.permissionList;//赋值已经拥有的权限
+				for (let [id,item] of map.entries()) {
+				  newData.push({
+					  key: id,
+					  label: item
+				  })
+				}
+				permissionsDialog.data= newData;
+				
+				let set = new Set();
+				for(let item of map.keys()){//循环获取 所选的角色拥有的权限 
+					if(row.permissionList.includes(item)){
+						set.add(item);
 					}
 				}
+				permissionsDialog.value=Array.from(set);//赋值已经拥有的权限
 			},
 			initRoleInfo(){//初始化数据
 				getPermissionInfoApi().then((res)=>{
 					let data=res.data.roleList;
 					//中文转义
-					let changeChineseName={"admin":"超级管理员","manager":"普通管理员","editor":"编辑者"};
+					let changeChineseName={"admin":"超级管理员","super_editor":"普通管理员","editor":"编辑者"};
 					const map=new Map(Object.entries(changeChineseName));//存储中文转义的数组方便查找
 					
 					let roleTable=[];
@@ -80,6 +98,9 @@
 					this.resData=res.data;
 				});
 			}
+		},
+		computed:{
+			...mapState('user',['permissionList'])
 		},
 		mounted() {
 			this.initRoleInfo();

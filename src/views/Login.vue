@@ -33,7 +33,7 @@
 		data() {
 			return {
 				loginForm: {
-					account: '1',
+					account: 'admin',
 					password: '1'
 				},
 				rules: {
@@ -64,11 +64,10 @@
 									let {token,data}=res;
 									localStorage.setItem('token',token);//获取token
 									this.$store.commit('user/setUserInfo',res);//保存用户信息在Vuex
+									resetRouter();//路由重置
 									let routesList=await this.$store.dispatch('user/generateRoutes',data.accountType);//动态路由表申请
-									console.log('Login',routesList)
-									resetRouter();
 									routesList.forEach( p => this.$router.addRoute(p)) //添加路由表
-								
+									
 									this.$router.push('/Home/userData');
 								})()
 							}else{

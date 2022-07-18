@@ -2,26 +2,42 @@
 	<div class="top-navigation">
 		<div class="left"></div>
 		<div class="right">
-			<div>
-				<el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size='60'></el-avatar>
-			</div>
+			<el-avatar :src="portraitUrl" :size='60' class="r-item"></el-avatar>
+			<el-dropdown class="r-item dropdown" trigger="click">
+				<span class="el-dropdown-link">
+					{{userInfo.account}}<i class="el-icon-arrow-down el-icon--right"></i>
+				</span>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item @click.native="exitFun">退出</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
 		</div>
 	</div>
 </template>
 
 <script>
+	import {userExitApi} from '@/request/api'
+	import {mapState} from 'vuex'
 	export default {
 		name: 'topNavigation', //顶部导航栏
 		data() {
 			return {
-
+				portraitUrl: require('@/assets/portrait.gif')
 			}
 		},
-		methods: {
-
+		computed:{
+			...mapState('user',['userInfo'])
 		},
-		components: {
-
+		methods: {
+			exitFun(){
+				userExitApi().then((res)=>{
+					this.$message.success('退出成功');
+					localStorage.removeItem('token');
+					setTimeout(()=>{
+						this.$router.push('/Login');
+					},1000)
+				});
+			}
 		}
 	}
 </script>
@@ -32,8 +48,19 @@
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
-		.right{
-			margin: 5px 10px;
+		background-color: white;
+
+		.right {
+			margin: 5px 15px;
+			display: flex;
+			align-items: center;
+		}
+
+		.r-item {
+			margin: 0 5px;
+		}
+		.dropdown{
+			cursor: pointer;
 		}
 	}
 </style>

@@ -6,6 +6,8 @@ export const loginApi = p => post('/areaBackLogin', p);
 /*主页*/
 //校验用户信息
 export const checkUserInfoApi = p => post('/areaBackCheckUserInfo', p);//发布文章
+export const userExitApi = p => get('/areaBackuserExit', p);//发布文章
+
 //文章管理
 export const publishArticleApi = p => post('/hotList', p);//发布文章
 export const articleManagementApi = p => post('/articleManagement', p);//文章管理数据

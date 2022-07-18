@@ -11,17 +11,20 @@ export default {
 				context.commit('setUserInfo', res);
 			});
 		},
-		generateRoutes(context, roleID) { //生成路由表
+		generateRoutes(context, roleType) { //生成路由表
+			
 			return getPermissionInfoApi().then((res)=>{
 				let roleList=res.data.roleList;
-				
-				roleList=roleList.filter((p)=>{
-					return p.accountType==roleID;
+				roleList=roleList.filter((p)=>{//获取对呀身份的权限表
+					return p.accountType==roleType;
 				});
-				let permissionList=Object.assign({},...roleList).permissionList;
+			
+				console.log("原来的",asyncRouter)
+				let permissionList=Object.assign({},...roleList).permissionList;//把数组变成对象
 				
-				const accessRoutes=filterAsyncRoutes(asyncRouter, permissionList);
-				accessRoutes.push(...errorRouter);
+				const accessRoutes=filterAsyncRoutes(asyncRouter, permissionList);//过滤有没有权限的路由
+				
+				accessRoutes.push(...errorRouter);//添加错误路由
 				
 				context.commit('SavePermissionList',permissionList);
 				context.commit('GenerateRoutes',accessRoutes);
@@ -60,9 +63,11 @@ export default {
  */
 
 function filterAsyncRoutes(routes,permissionList) {
+	console.log("routes",routes)
 	let routesList=new Set(permissionList);
+	let deepClone=routes.map(o => ({...o}));
 	let newRoutes,isRole;
-	newRoutes=routes.filter((p)=>{//第一层过滤是否有权限
+	newRoutes=deepClone.filter((p)=>{//第一层过滤是否有权限
 		isRole=routesList.has(p.meta.roleID);
 		if(isRole){
 			if(p.children){//判断是否有children
@@ -73,6 +78,6 @@ function filterAsyncRoutes(routes,permissionList) {
 			return true;
 		}else false;
 	});
-	
+	console.log("结束",newRoutes,routes)
 	return newRoutes;
 }
