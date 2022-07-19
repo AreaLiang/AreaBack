@@ -87,7 +87,7 @@
 	}
 </script>
 
-<style  lang="less">
+<style lang="less">
 	@import '/src/styles/loginBackground.css';
 
 	@borderRadius: 21px; //输入框的圆角像素

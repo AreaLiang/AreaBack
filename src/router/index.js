@@ -47,6 +47,11 @@ export const constantRoutes = [{
 				name: 'CommentManagement',
 				path: 'commentManagement',
 				component: () => import('@/views/Home/Article/CommentManagement')
+			},
+			{ //认证中心
+				name: 'CertificationCenter',
+				path: 'certificationCenter',
+				component: () => import('@/views/Home/CertificationCenter/index')
 			}
 		]
 	}

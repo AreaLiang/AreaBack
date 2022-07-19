@@ -24,7 +24,8 @@ export const getAccountListApi = p => post('/getAccountList', p);//获取审核�
 export const getPermissionInfoApi = p => get('/getPermissionInfo', p);//获取账号列表和用户权限 功能
 export const banAccountApi = p => post('/banAccount', p);//用户管理禁用账号 功能
 export const delAccount_PERApi = p => post('/delAccount_PER', p);//删除账号 功能
-export const modifyAccount_PERApi = p => post('/modifyAccount_PER', p);//删除账号 功能
+export const modifyAccount_PERApi = p => post('/modifyAccount_PER', p);//用户管理 修改账号的密码 功能
+export const modifyUser_PERApi = p => post('/modifyUserPermission', p);//修改用户权限
 
 
 

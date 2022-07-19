@@ -40,9 +40,7 @@ router.beforeEach(async (to, from, next) => {
 						next({...to,replace: true});
 					}else{
 						Message.warning("登录失效,正在为你转跳登录页面");
-						setTimeout(()=>{
-							router.push('/Login');
-						},1000)
+						setTimeout(()=>{router.push('/Login')},1000)
 					}
 				})();
 			}else next();

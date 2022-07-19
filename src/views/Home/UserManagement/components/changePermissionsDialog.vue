@@ -8,13 +8,14 @@
 			</div>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="permissionsVisible = false">取 消</el-button>
-				<el-button type="primary" @click="permissionsVisible = false">确 定</el-button>
+				<el-button type="primary" @click="confirmChange">确 定</el-button>
 			</span>
 		</el-dialog>
 	</div>
 </template>
 
 <script>
+	import {modifyUser_PERApi} from '@/request/api'
 	export default {
 		name: 'changePermissionsDialog', //更改权限弹窗
 		data() {
@@ -23,7 +24,26 @@
 				value: [],
 				permissionsVisible: false
 			}
-		}
+		},
+		methods:{
+			confirmChange(){//更改权限
+				let perList=JSON.parse(JSON.stringify(this.value));
+				perList.push(1);
+			
+				modifyUser_PERApi({
+					id:this.currentRoleKey,
+					newPm:JSON.stringify(perList)
+				}).then((res)=>{
+					if(res.code="200"){
+						this.$message.success("更改成功");
+						this.$emit('initRoleInfo');
+					}
+					
+				});
+				this.permissionsVisible = false
+			}
+		},
+		props:['currentRoleKey']
 	}
 </script>
 

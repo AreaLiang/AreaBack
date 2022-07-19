@@ -12,14 +12,12 @@ export default {
 			});
 		},
 		generateRoutes(context, roleType) { //生成路由表
-			
 			return getPermissionInfoApi().then((res)=>{
 				let roleList=res.data.roleList;
 				roleList=roleList.filter((p)=>{//获取对呀身份的权限表
 					return p.accountType==roleType;
 				});
-			
-				console.log("原来的",asyncRouter)
+
 				let permissionList=Object.assign({},...roleList).permissionList;//把数组变成对象
 				
 				const accessRoutes=filterAsyncRoutes(asyncRouter, permissionList);//过滤有没有权限的路由
@@ -63,7 +61,6 @@ export default {
  */
 
 function filterAsyncRoutes(routes,permissionList) {
-	console.log("routes",routes)
 	let routesList=new Set(permissionList);
 	let deepClone=routes.map(o => ({...o}));
 	let newRoutes,isRole;
@@ -78,6 +75,5 @@ function filterAsyncRoutes(routes,permissionList) {
 			return true;
 		}else false;
 	});
-	console.log("结束",newRoutes,routes)
 	return newRoutes;
 }

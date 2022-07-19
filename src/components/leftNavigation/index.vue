@@ -80,7 +80,7 @@
 					type:'single',
 					title:'认证中心',
 					icon:'el-icon-s-check',
-					url:'#'
+					url:'/Home/certificationCenter'
 				},
 				{
 					type:'single',
