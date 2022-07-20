@@ -8,6 +8,7 @@ export const FormValidationRules = {//表单常用的验证规则
 			if (!/^1[3456789]\d{9}$/.test(value)) {
 				callback(new Error('手机号不正确！'));
 			}
+			callback()
 		};
 		return {
 			rules:{
@@ -24,7 +25,7 @@ export const FormValidationRules = {//表单常用的验证规则
 				],
 				password: [{
 						required: true,
-						message: '请输入活动名称',
+						message: '请输入密码',
 						trigger: 'blur'
 					},
 					{
@@ -35,7 +36,8 @@ export const FormValidationRules = {//表单常用的验证规则
 				],
 				phone: [{
 					validator: validatePhone,
-					trigger: 'blur'
+					trigger: 'blur',
+					required: true
 				}]
 			}
 		}
