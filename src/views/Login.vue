@@ -71,7 +71,7 @@
 									this.$router.push('/Home/userData');
 								})()
 							}else{
-								this.$message.warning('账号或密码错误');
+								this.$message.warning(res.mes);
 							}
 						}).catch((e)=>{
 							console.log(e)

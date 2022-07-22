@@ -2,28 +2,7 @@
 	<div class="article-verify">
 		<div class="wrap">
 			<div class="ob-list">
-				<el-form :inline="true" :model="articleQueryForm" class="demo-form-inline">
-					<el-form-item label="文章标题">
-						<el-input v-model="articleQueryForm.content" placeholder="请输入搜索内容"></el-input>
-					</el-form-item>
-					<el-form-item label="文章类别">
-						<el-select v-model="articleQueryForm.articleType">
-							<el-option label="全部" value="all"></el-option>
-							<el-option label="政治" value="zhengzhi"></el-option>
-							<el-option label="体育" value="tiyu"></el-option>
-							<el-option label="财经" value="caijing"></el-option>
-							<el-option label="科技" value="keji"></el-option>
-							<el-option label="娱乐" value="yule"></el-option>
-							<el-option label="美食" value="meishi"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="日期范围">
-						<datePicker></datePicker>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="onSubmit">查询</el-button>
-					</el-form-item>
-				</el-form>
+				<serachBox ref="serachBox" statustype='shz' @search="searchSubmit"></serachBox>
 			</div>
 			<el-table :data="tableData"  style="width: 100%;height: 750px;overflow:auto" @selection-change="handleSelectionChange"
 				:header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" class="article_mag" v-loading='loading'>
@@ -81,7 +60,8 @@
 	import pagination from '@/components/pagination'
 	import datePicker from '@/components/datePicker'
 	import checkOriginal from './components/checkOriginal'
-	import {getVerifyArticleListApi,articleVerifyApi} from '@/request/api'
+	import {getVerifyArticleListApi,articleVerifyApi,articleMgeSearchApi} from '@/request/api'
+	import serachBox from './components/serachBox'
 	export default {
 		name: 'articleVerify', //文章审核
 		data() {
@@ -104,9 +84,6 @@
 			}
 		},
 		methods: {
-			onSubmit() {
-
-			},
 			handleSelectionChange(val) {
 				this.multipleSelection = val;
 				console.log(val)
@@ -135,8 +112,25 @@
 					id:row.id,
 					opcode:opcode
 				}).then((res)=>{
-					this.getData();
-				});
+					this.$refs['serachBox'].searchSubmit();
+				})
+			},
+			searchSubmit(searchList){
+				this.loading = true;
+				
+				const searchFun= () => {//搜索接口调用
+					articleMgeSearchApi({
+						page: this.page,
+						number: this.number,
+						searchList: JSON.stringify(searchList)
+					}).then((res) => {
+						this.tableData = Object.values(res.data);
+						this.dataTotal = parseInt(res.list) * this.number;
+						this.loading = false;
+					}).catch(e => this.loading = true)
+				}
+				//加入防抖函数
+				this.debounce(searchFun)();
 			}
 		},
 		mounted() {
@@ -152,7 +146,8 @@
 		components: {
 			pagination,
 			datePicker,
-			checkOriginal
+			checkOriginal,
+			serachBox
 		}
 	}
 </script>

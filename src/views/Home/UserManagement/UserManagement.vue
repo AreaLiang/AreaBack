@@ -2,27 +2,7 @@
 	<div class="user-management">
 		<div class="wrap">
 			<div class="ob-list">
-				<el-form :inline="true" :model="articleQueryForm" class="demo-form-inline">
-					<el-form-item label="文章标题">
-						<el-input v-model="articleQueryForm.content" placeholder="请输入搜索内容"></el-input>
-					</el-form-item>
-					<el-form-item label="文章类别">
-						<el-select v-model="articleQueryForm.articleType">
-							<el-option label="全部" value="all"></el-option>
-							<el-option label="政治" value="zhengzhi"></el-option>
-							<el-option label="体育" value="tiyu"></el-option>
-							<el-option label="财经" value="caijing"></el-option>
-							<el-option label="科技" value="keji"></el-option>
-							<el-option label="娱乐" value="yule"></el-option>
-							<el-option label="美食" value="meishi"></el-option>
-						</el-select>
-					</el-form-item>
-				
-					<el-form-item>
-						<el-button type="primary" @click="onSubmit">查询</el-button>
-						<el-button type="primary" @click="addUser">添加账号</el-button>
-					</el-form-item>
-				</el-form>
+				<el-button type="primary" @click="addUser">添加账号</el-button>
 			</div>
 			<el-table :data="tableData" style="width: 100%;height: 750px;overflow:auto"
 				@selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}"
@@ -180,5 +160,8 @@
 
 	.user-management {
 		.artcleMegStyle();
+		.ob-list{
+			margin: 10px 0;
+		}
 	}
 </style>

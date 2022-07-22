@@ -2,7 +2,7 @@
 	<div class="comment-management">
 		<div class="wrap">
 			<div class="ob-list">
-				<el-form :inline="true" :model="articelQueryForm" class="demo-form-inline">
+				<!-- <el-form :inline="true" :model="articelQueryForm" class="demo-form-inline">
 					<el-form-item label="文章标题">
 						<el-input v-model="articelQueryForm.content" placeholder="请输入搜索内容"></el-input>
 					</el-form-item>
@@ -23,7 +23,7 @@
 					<el-form-item>
 						<el-button type="primary" @click="onSubmit">查询</el-button>
 					</el-form-item>
-				</el-form>
+				</el-form> -->
 			</div>
 			<el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
 				:header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" class="article_mag">
@@ -82,6 +82,7 @@
 <script>
 	import pagination from '@/components/pagination'
 	import datePicker from '@/components/datePicker'
+	import {fileLinkToStreamDownload} from '@/utils'
 	export default {
 		name: 'CommentManagement', //评论管理
 		data() {
@@ -134,6 +135,8 @@
 		methods: {
 			handleExport(index, row) {
 				console.log(index, row);
+				let link=`${window.location.origin}/test.pdf`;
+				fileLinkToStreamDownload(link,'文件');
 			},
 			onSubmit() {
 

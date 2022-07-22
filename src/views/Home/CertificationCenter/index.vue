@@ -12,7 +12,7 @@
 			<div class="main">
 				<div class="step1" v-show="stepIndex==0">
 					<div class="item">
-						<cftInfoForm ref="CertificationInfo" @submitForm='submitForm'/>
+						<cftInfoForm ref="CertificationInfo"/>
 					</div>
 					<div class="item">
 						<p>上传公司营业执照</p>
@@ -29,6 +29,7 @@
 				<div class="step4"></div>
 			</div>
 			<div class="btn-box">
+				<el-button type="primary" class="sub-btn" v-show="stepIndex==1" @click="back">返回</el-button>
 				<el-button type="primary" class="sub-btn" v-show="stepIndex==0" @click="submitForm('CertificationInfo')">提交</el-button>
 				<el-button type="primary" class="sub-btn" v-show="stepIndex==1" @click="checkCode">提交</el-button>
 			</div>
@@ -53,16 +54,16 @@
 				let sonComponent=this.$refs[formName];
 				sonComponent.$refs['ruleForm'].validate((valid) => {
 					if (valid) {
-						if(this.stepIndex ==0) this.stepIndex +=1;//步骤条进度加一
-						this.$refs['phoneCode'].ruleForm.second=59;//设置验证码秒数
-					} else {
-						console.log('error submit!!');
-						return false;
-					}
+						if(this.stepIndex ==0) this.stepIndex += 1;//步骤条进度加一
+						this.$refs['phoneCode'].ruleForm.second = 59;//设置验证码秒数
+					} else return false
 				});
 			},
 			checkCode(){//校验验证码
 				if(this.stepIndex ==1) this.stepIndex +=1;
+			},
+			back(){//后退
+				if(this.stepIndex >0 && this.stepIndex <3)  this.stepIndex -= 1;
 			}
 		},
 		components: {
