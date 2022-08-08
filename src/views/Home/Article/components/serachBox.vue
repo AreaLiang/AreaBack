@@ -27,7 +27,7 @@
 				<datePicker ref="datePicker"></datePicker>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" @click="searchSubmit">查询</el-button>
+				<el-button type="primary" @click="searchSubmit" v-throttle>查询</el-button>
 				<slot name="batchDeletion"></slot>
 			</el-form-item>
 		</el-form>
@@ -56,7 +56,7 @@
 		methods: {
 			searchSubmit(){
 				this.articleQueryForm.dateRange = this.$refs['datePicker'].dateRange;
-				this.$emit('search',this.articleQueryForm)
+				this.$emit('search',this.articleQueryForm);
 			}
 		},
 		components: {

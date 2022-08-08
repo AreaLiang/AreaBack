@@ -5,14 +5,14 @@
 				<p class="title">欢迎来到Area登录界面</p>
 				<el-form :model="loginForm" :rules="rules" ref="loginForm" style="width: 320px;">
 					<el-form-item prop="accound">
-						<el-input placeholder="请输入账号" v-model="loginForm.account" class="bc-input">
-							<el-button slot="prepend" icon="el-icon-user cfu-icon"></el-button>
+						<el-input placeholder="请输入账号" v-model="loginForm.account" class="bc-input" v-focus>
+							<el-button slot="prepend" icon="el-icon-user cfu-icon" ></el-button>
 						</el-input>
 					</el-form-item>
 
 					<el-form-item prop="password">
 						<el-input placeholder="请输入密码" v-model="loginForm.password" :show-password='true'
-							class="bc-input">
+							class="bc-input" @keyup.enter.native="submitForm('loginForm')">
 							<el-button slot="prepend" icon="el-icon-lock cfu-icon"></el-button>
 						</el-input>
 					</el-form-item>
@@ -33,8 +33,8 @@
 		data() {
 			return {
 				loginForm: {
-					account: 'admin',
-					password: '1'
+					account: '',
+					password: ''
 				},
 				rules: {
 					account: [{
