@@ -6,7 +6,7 @@
 				<el-form :model="loginForm" :rules="rules" ref="loginForm" style="width: 320px;">
 					<el-form-item prop="accound">
 						<el-input placeholder="请输入账号" v-model="loginForm.account" class="bc-input" v-focus>
-							<el-button slot="prepend" icon="el-icon-user cfu-icon" ></el-button>
+							<el-button slot="prepend" icon="el-icon-user cfu-icon"></el-button>
 						</el-input>
 					</el-form-item>
 
@@ -26,15 +26,19 @@
 
 <script>
 	import loginBackground from '@/components/loginBackground'
-	import {loginApi} from '@/request/api'
-	import {resetRouter} from '@/router'
+	import {
+		loginApi
+	} from '@/request/api'
+	import {
+		resetRouter
+	} from '@/router'
 	export default {
 		name: 'Login', //登录界面
 		data() {
 			return {
 				loginForm: {
-					account: '',
-					password: ''
+					account: 'admin',
+					password: '1'
 				},
 				rules: {
 					account: [{
@@ -55,25 +59,29 @@
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						loginApi({
-							account:this.loginForm.account,
-							password:this.loginForm.password
-						}).then((res)=>{
+							account: this.loginForm.account,
+							password: this.loginForm.password
+						}).then((res) => {
 							console.log(res);
-							if(res.code=="200"){
+							if (res.code == "200") {
 								(async () => {
-									let {token,data}=res;
-									localStorage.setItem('token',token);//获取token
-									this.$store.commit('user/setUserInfo',res);//保存用户信息在Vuex
-									resetRouter();//路由重置
-									let routesList=await this.$store.dispatch('user/generateRoutes',data.accountType);//动态路由表申请
-									routesList.forEach( p => this.$router.addRoute(p)) //添加路由表
-									
+									let {
+										token,
+										data
+									} = res;
+									localStorage.setItem('token', token); //获取token
+									this.$store.commit('user/setUserInfo', res); //保存用户信息在Vuex
+									resetRouter(); //路由重置
+									let routesList = await this.$store.dispatch(
+										'user/generateRoutes', data.accountType); //动态路由表申请
+									routesList.forEach(p => this.$router.addRoute(p)) //添加路由表
+
 									this.$router.push('/Home/userData');
 								})()
-							}else{
+							} else {
 								this.$message.warning(res.mes);
 							}
-						}).catch((e)=>{
+						}).catch((e) => {
 							console.log(e)
 							this.$message.error('服务出错');
 						});
@@ -88,8 +96,6 @@
 </script>
 
 <style lang="less">
-	@import '/src/styles/loginBackground.css';
-
 	@borderRadius: 21px; //输入框的圆角像素
 
 	.login {
@@ -115,7 +121,7 @@
 			border-radius: @borderRadius;
 
 			.el-input__inner,
-			.el-input-group__prepend{
+			.el-input-group__prepend {
 				.customize_input
 			}
 

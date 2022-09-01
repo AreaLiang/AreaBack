@@ -61,7 +61,7 @@
 			publish(formName) {//发布文章
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						
+					
 						const publishFun=()=>{
 							let date = new Date();
 							let year = date.getFullYear();

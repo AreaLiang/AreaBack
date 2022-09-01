@@ -1,57 +1,81 @@
 {
-  "name": "area_back",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "@wangeditor/editor-for-vue": "^1.0.1",
-    "axios": "^0.27.2",
-    "core-js": "^2.6.5",
-    "echarts": "^5.3.2",
-    "element-ui": "^2.15.8",
-    "less-loader": "^6.2.0",
-    "nanoid": "^3.3.4",
-    "nprogress": "^0.2.0",
-    "particles-bg": "^2.5.5",
-    "vue": "^2.6.10",
-    "vue-count-to": "^1.0.13",
-    "vue-router": "^3.5.3",
-    "vuex": "^3.6.2"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.12.0",
-    "@vue/cli-plugin-eslint": "^3.12.0",
-    "@vue/cli-service": "^3.12.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.6.10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+	"name": "area_back",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"serve": "vue-cli-service serve",
+		"build": "vue-cli-service build",
+		"lint": "vue-cli-service lint"
+	},
+	"dependencies": {
+		"@wangeditor/editor-for-vue": "^1.0.1",
+		"axios": "^0.27.2",
+		"babel-plugin-component": "^1.1.1",
+		"compression-webpack-plugin": "^4.0.1",
+		"core-js": "^2.6.5",
+		"element-ui": "^2.15.8",
+		"less-loader": "^6.2.0",
+		"lodash": "^4.17.21",
+		"nanoid": "^3.3.4",
+		"nprogress": "^0.2.0",
+		"particles-bg": "^2.5.5",
+		"vue": "^2.6.10",
+		"vue-count-to": "^1.0.13",
+		"vue-router": "^3.5.3",
+		"vuex": "^3.6.2"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-babel": "^3.12.0",
+		"@vue/cli-plugin-eslint": "^3.12.0",
+		"@vue/cli-service": "^3.12.0",
+		"babel-eslint": "^10.0.1",
+		"clean-webpack-plugin": "^4.0.0",
+		"eslint": "^5.16.0",
+		"eslint-plugin-vue": "^5.0.0",
+		"image-webpack-loader": "^8.1.0",
+		"vue-template-compiler": "^2.6.10",
+		"webpack-bundle-analyzer": "^3.9.0"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"plugin:vue/essential",
+			"eslint:recommended"
+		],
+		"rules": {},
+		"parserOptions": {
+			"parser": "babel-eslint"
+		},
+		"globals": {
+			"mapState": true,
+			"mapGetters": true,
+			"mapActions": true,
+			"mapMutations": true,
+			"_": true
+		}
+	},
+	"postcss": {
+		"plugins": {
+			"autoprefixer": {}
+		}
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions"
+	],
+	"description": "## Project setup ``` npm install ```",
+	"main": "babel.config.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AreaLiang/AreaBack.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/AreaLiang/AreaBack/issues"
+	},
+	"homepage": "https://github.com/AreaLiang/AreaBack#readme"
 }

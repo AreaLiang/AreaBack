@@ -68,7 +68,7 @@
 			//渲染图表方法，i是数组的索引
 			initCharts(i) {
 				// 初始化图表，设置配置项
-				var myChart = this.echarts.init(this.$refs.chart);
+				var myChart = window.echarts.init(this.$refs.chart);
 				myChart.clear(); //清除数据重新渲染
 				myChart.setOption({
 					title: {

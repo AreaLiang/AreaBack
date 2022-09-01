@@ -51,6 +51,7 @@
 	import postStatus from './components/postStatus'
 	import taskProcess from './components/taskProcess'
 	import countTo from 'vue-count-to';
+
 	export default {
 		name: 'UserData', //用户数据
 		data() {
@@ -82,9 +83,6 @@
 			currentCardPanelFun(i){
 				this.currentCardPanel=i;
 			}
-		},
-		mounted(){
-			
 		},
 		components: {
 			headEchart,

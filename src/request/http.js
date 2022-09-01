@@ -7,15 +7,15 @@ axios.defaults.timeout = 15000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 // axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 // 环境的切换
-// if (process.env.NODE_ENV == 'development') {    
-//     axios.defaults.baseURL = '/api';
-// } else if (process.env.NODE_ENV == 'debug') {    
-//     axios.defaults.baseURL = '';
-// } else if (process.env.NODE_ENV == 'production') {    
-//     axios.defaults.baseURL = 'http://api.123dailu.com/';
-// }
+if (process.env.NODE_ENV == 'development') {    
+    axios.defaults.baseURL = 'http://localhost:8080/api';
+} else if (process.env.NODE_ENV == 'debug') {    
+    axios.defaults.baseURL = '';
+} else if (process.env.NODE_ENV == 'production') {    
+    axios.defaults.baseURL = 'http://192.168.0.24:8080/api';
+}
 
-axios.defaults.baseURL = 'http://localhost:8080/api';
+// axios.defaults.baseURL = '';
 
 // 请求拦截器
 axios.interceptors.request.use(
