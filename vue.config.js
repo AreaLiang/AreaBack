@@ -39,7 +39,7 @@ module.exports = {
 		// liveReload: false,
 		proxy: {
 			'/api': {
-				target: 'http://localhost:50006', //跨域端口
+				target: 'http://localhost:5000', //跨域端口
 				pathRewrite: {
 					'^/api': ''
 				}
