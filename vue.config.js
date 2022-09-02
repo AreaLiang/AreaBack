@@ -10,14 +10,14 @@ const {
         vue: 'Vue',
         'element-plus': 'ElementPlus',
     },
-    css:[
-      // 存放 引用 css文件的地址
-      // '//unpkg.com/element-plus@1.0.2-beta.48/lib/theme-chalk/index.css',
-    ],
-    js:[
-      // 存放 引用 js 文件的地址
-      // '//unpkg.com/vue@3.1.1/dist/vue.global.js',
-    ]
+    // css:[
+    //   // 存放 引用 css文件的地址
+    //   // '//unpkg.com/element-plus@1.0.2-beta.48/lib/theme-chalk/index.css',
+    // ],
+    // js:[
+    //   // 存放 引用 js 文件的地址
+    //   // '//unpkg.com/vue@3.1.1/dist/vue.global.js',
+    // ]
   }
 
 
@@ -35,9 +35,11 @@ module.exports = {
 	assetsDir: 'static',
 	lintOnSave: false,
 	devServer: {
+		// hot: false,
+		// liveReload: false,
 		proxy: {
 			'/api': {
-				target: 'http://localhost:5000', //跨域端口
+				target: 'http://localhost:50006', //跨域端口
 				pathRewrite: {
 					'^/api': ''
 				}
