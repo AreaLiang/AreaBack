@@ -1,6 +1,6 @@
 <template>
 	<div class="echart-list">
-		<div ref="chart" style="width: 100%;height: 400px;background-color: white;"></div>
+		<div ref="chart" style="width: 100%;height: 400px;background-color: white;" id="aa"></div>
 	</div>
 </template>
 
@@ -103,7 +103,7 @@
 		mounted() {
 			//初始化图表
 			this.initCharts(this.currentCardPanel);
-			
+
 			//当宽度变化时候，图标自适应跟着变化
 			window.onresize=()=>{
 				let chart=this.echarts.init(this.$refs.chart);

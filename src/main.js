@@ -73,7 +73,10 @@ import './utils/customDirective'
 // 	LegendComponent
 // ]);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.config.errorHandler=function(err,vm,info){
+	console.log(err,info)
+}
 
 new Vue({
 	render: h => h(App),

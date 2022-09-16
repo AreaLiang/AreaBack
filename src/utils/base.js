@@ -30,6 +30,7 @@ export default function(Vue, options) {
 	 */
 	let timer = null;
 	Vue.prototype.debounce = function (fn, delay = 500, isImmediate = false) {
+		
 		let isExcute = isImmediate;
 		const _debounce = function(...args) {
 			if (isExcute) { //判断是否需要第一次调用时候，立即执行

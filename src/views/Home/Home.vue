@@ -10,7 +10,9 @@
 			<el-col :span="21" class="h-style">
 				<div class="content">
 					<topNavigation />
-					<router-view></router-view>
+					<keep-alive include="UserData">
+						<router-view></router-view>
+					</keep-alive>
 				</div>
 			</el-col>
 		</el-row>

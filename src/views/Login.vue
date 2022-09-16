@@ -32,6 +32,7 @@
 	import {
 		resetRouter
 	} from '@/router'
+
 	export default {
 		name: 'Login', //登录界面
 		data() {
@@ -56,6 +57,7 @@
 		},
 		methods: {
 			submitForm(formName) {
+			
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						loginApi({
@@ -87,6 +89,21 @@
 						});
 					}
 				});
+				
+				var arr = [
+				  {
+				  name:'张三',
+				  value: '河南'
+				  },
+				  {
+				    name:'王二',
+				    value: '阿里'
+				  },
+				  {
+				    name:'王二',
+				    value: '杭州'
+				  }
+				]
 			},
 		},
 		components: {
